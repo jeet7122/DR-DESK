@@ -6,6 +6,7 @@ import org.example.hms.utils.DatabaseConnector;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 public class MainScreenApplication extends Application {
     @Override

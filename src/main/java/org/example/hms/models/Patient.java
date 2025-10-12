@@ -14,8 +14,8 @@ public class Patient {
     private LocalDateTime dateOfRegistration;
     private boolean hasChronicDisease;
 
-    public boolean isHasChronicDisease() {
-        return hasChronicDisease;
+    public String isHasChronicDisease() {
+        return String.valueOf(hasChronicDisease);
     }
 
     public void setHasChronicDisease(boolean hasChronicDisease) {

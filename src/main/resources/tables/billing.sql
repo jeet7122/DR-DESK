@@ -11,3 +11,4 @@ CREATE TABLE billing(
     foreign key (appointment_id) REFERENCES appointment(appointment_id),
     foreign key (patient_id) REFERENCES patients(id)
 );
+
