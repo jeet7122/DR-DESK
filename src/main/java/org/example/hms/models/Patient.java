@@ -12,6 +12,7 @@ public class Patient {
     private String email;
     private String bloodGroup;
     private LocalDateTime dateOfRegistration;
+    private boolean hasChronicDisease;
 
     public Patient(int id, String firstName, String lastName, int age, String gender, String address, String email, String bloodGroup, LocalDateTime dateOfRegistration) {
         this.id = id;
