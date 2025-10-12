@@ -14,7 +14,15 @@ public class Patient {
     private LocalDateTime dateOfRegistration;
     private boolean hasChronicDisease;
 
-    public Patient(int id, String firstName, String lastName, int age, String gender, String address, String email, String bloodGroup, LocalDateTime dateOfRegistration) {
+    public boolean isHasChronicDisease() {
+        return hasChronicDisease;
+    }
+
+    public void setHasChronicDisease(boolean hasChronicDisease) {
+        this.hasChronicDisease = hasChronicDisease;
+    }
+
+    public Patient(int id, String firstName, String lastName, int age, String gender, String address, String email, String bloodGroup, LocalDateTime dateOfRegistration, boolean hasChronicDisease) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -24,6 +32,7 @@ public class Patient {
         this.email = email;
         this.bloodGroup = bloodGroup;
         this.dateOfRegistration = dateOfRegistration;
+        this.hasChronicDisease = hasChronicDisease;
     }
 
     public Patient() {
