@@ -4,5 +4,6 @@ CREATE TABLE medical_records(
     condition VARCHAR(50),
     description VARCHAR(255),
     date_diagnosed DATE DEFAULT current_timestamp,
-    current_status VARCHAR(50)
+    current_status VARCHAR(50),
+    foreign key (patient_id) REFERENCES patients(id)
 );
