@@ -8,5 +8,6 @@ CREATE TABLE doctors(
     address VARCHAR(255),
     department_id INT,
     joining_date DATE DEFAULT current_timestamp,
-    is_available BOOLEAN
+    is_available BOOLEAN,
+    foreign key (department_id) REFERENCES department(department_id)
 );
