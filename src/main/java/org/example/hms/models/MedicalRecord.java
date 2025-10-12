@@ -66,4 +66,16 @@ public class MedicalRecord {
     public void setCurrentStatus(String currentStatus) {
         this.currentStatus = currentStatus;
     }
+
+    @Override
+    public String toString() {
+        return "MedicalRecord{" +
+                "id=" + id +
+                ", patientId=" + patientId +
+                ", condition='" + condition + '\'' +
+                ", description='" + description + '\'' +
+                ", dateDiagnosed=" + dateDiagnosed +
+                ", currentStatus='" + currentStatus + '\'' +
+                '}';
+    }
 }
