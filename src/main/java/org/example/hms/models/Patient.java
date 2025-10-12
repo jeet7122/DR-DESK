@@ -14,11 +14,23 @@ public class Patient {
     private LocalDateTime dateOfRegistration;
     private boolean hasChronicDisease;
 
-    public String isHasChronicDisease() {
-        return String.valueOf(hasChronicDisease);
+    public boolean isHasChronicDisease() {
+        return hasChronicDisease;
     }
 
     public void setHasChronicDisease(boolean hasChronicDisease) {
+        this.hasChronicDisease = hasChronicDisease;
+    }
+
+    public Patient(String bloodGroup, int id, String firstName, String lastName, int age, String gender, String address, String email, boolean hasChronicDisease) {
+        this.bloodGroup = bloodGroup;
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.gender = gender;
+        this.address = address;
+        this.email = email;
         this.hasChronicDisease = hasChronicDisease;
     }
 

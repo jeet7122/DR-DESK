@@ -7,7 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 public class PatientDAO {
-    private static boolean insertPatient(Patient p){
+    public static boolean insertPatient(Patient p){
         String sql = "INSERT INTO patients(first_name, last_name, age, gender, address, blood_group, has_chronic_disease) VALUES (?,?,?,?,?,?,?)";
 
         try(Connection connection = DatabaseConnector.getConnection();
@@ -19,8 +19,9 @@ public class PatientDAO {
             statement.setString(4, p.getGender());
             statement.setString(5, p.getAddress());
             statement.setString(6, p.getBloodGroup());
-            statement.setString(7, p.isHasChronicDisease());
-
+            statement.setBoolean(7, p.isHasChronicDisease());
+            statement.execute();
+            return true;
         }
         catch (Exception e) {
             e.printStackTrace();
