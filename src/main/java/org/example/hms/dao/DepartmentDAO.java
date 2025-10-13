@@ -63,4 +63,6 @@ public class DepartmentDAO {
             System.out.println("Not a supported operation" + e.getMessage());
         }
     }
+
+    
 }

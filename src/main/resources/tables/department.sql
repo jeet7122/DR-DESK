@@ -4,3 +4,5 @@ CREATE TABLE department(
     location VARCHAR(50),
     description VARCHAR(50)
 );
+ALTER TABLE department
+ALTER description TYPE VARCHAR(255);
