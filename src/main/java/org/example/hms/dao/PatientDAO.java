@@ -95,4 +95,31 @@ public class PatientDAO {
 
         return false;
     }
+
+    public static void deletePatient(int id){
+        String sql = """
+                DELETE FROM patients
+                WHERE id = ?
+                """;
+
+        try(
+                Connection conn = DatabaseConnector.getConnection();
+                PreparedStatement statement = conn.prepareStatement(sql);
+                )
+        {
+            statement.setInt(1, id);
+            boolean executed = statement.execute();
+            if (executed){
+                System.out.println("Successfully deleted patient with id " + id);
+            }
+            else {
+                System.out.println("Failed to delete patient with id " + id);
+            }
+        }
+
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 }

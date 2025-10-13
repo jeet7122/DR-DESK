@@ -23,14 +23,14 @@ public class MainScreenApplication extends Application {
                 System.out.println("Database not connected.");
             }
             Patient p  = new Patient();
-            p.setFirstName("Harsh");
+            p.setFirstName("Dhrish");
             p.setLastName("Thakkar");
-            p.setAge(30);
+            p.setAge(4);
             p.setGender("Male");
             p.setAddress("1630 College Avenue");
-            p.setBloodGroup("A+");
+            p.setBloodGroup("O+");
             p.setHasChronicDisease(false);
-            p.setEmail("h@123@x-mail.com");
+            p.setEmail("dh@123@x-mail.com");
 
             boolean inserted = PatientDAO.insertPatient(p);
             if(inserted){
@@ -40,7 +40,9 @@ public class MainScreenApplication extends Application {
                 System.out.println("Patient insert failed.");
             }
 
-            Patients.updatePatient("Khushi", "Parikh", "k@123@x-mail.com", 8);
+            Patients.updatePatient("Jeet", "Thakkar", "j@123@x-mail.com", 6);
+
+            PatientDAO.deletePatient(9);
             List<Patient> patients = PatientDAO.getAllPatients();
             patients.forEach(System.out::println);
 
