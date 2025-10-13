@@ -103,4 +103,32 @@ public class MedicalRecordsDAO {
             System.out.println("SQLException: " +  e.getMessage());
         }
     }
+
+    public static void deleteMedicalRecord(int id){
+
+        String query = """
+                DELETE FROM medical_records
+                WHERE id = ?
+                """;
+
+        try(
+                Connection connection = DatabaseConnector.getConnection();
+                PreparedStatement statement = connection.prepareStatement(query)
+                )
+        {
+            statement.setInt(1, id);
+            int updated = statement.executeUpdate();
+            if(updated > 0)
+            {
+                System.out.println("Record deleted successfully");
+            }
+            else
+            {
+                System.out.println("Failed to delete medical record");
+            }
+        }
+        catch (Exception e) {
+            System.out.println("SQLException: " +  e.getMessage());
+        }
+    }
 }
