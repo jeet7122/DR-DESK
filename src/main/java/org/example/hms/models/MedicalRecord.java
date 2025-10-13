@@ -19,6 +19,9 @@ public class MedicalRecord {
         this.id = id;
     }
 
+    public MedicalRecord() {
+    }
+
     public int getId() {
         return id;
     }

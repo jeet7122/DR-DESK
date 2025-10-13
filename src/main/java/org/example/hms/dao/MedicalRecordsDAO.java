@@ -5,6 +5,11 @@ import org.example.hms.utils.DatabaseConnector;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MedicalRecordsDAO {
     public static void AddMedicalRecord(MedicalRecord medicalRecord){
@@ -37,5 +42,31 @@ public class MedicalRecordsDAO {
         }
     }
 
-    
+    public static List<MedicalRecord> getMedicalRecords(){
+        String query = """
+                SELECT * FROM medical_records
+        """;
+        List<MedicalRecord> medicalRecords = new ArrayList<>();
+        try(Connection connection = DatabaseConnector.getConnection();
+            PreparedStatement statement = connection.prepareStatement(query);
+            ResultSet resultSet = statement.executeQuery();
+        )
+        {
+            while (resultSet.next()){
+                MedicalRecord newMedicalRecord = new MedicalRecord();
+                newMedicalRecord.setId(resultSet.getInt("id"));
+                newMedicalRecord.setPatientId(resultSet.getInt("patient_id"));
+                newMedicalRecord.setCondition(resultSet.getString("condition"));
+                newMedicalRecord.setDescription(resultSet.getString("description"));
+                newMedicalRecord.setCurrentStatus(resultSet.getString("current_status"));
+                newMedicalRecord.setDateDiagnosed(resultSet.getObject("date_diagnosed", LocalDate.class));
+                medicalRecords.add(newMedicalRecord);
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Exception: " + e.getMessage());
+        }
+
+        return medicalRecords;
+    }
 }
