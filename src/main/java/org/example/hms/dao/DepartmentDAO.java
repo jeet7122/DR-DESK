@@ -31,7 +31,8 @@ public class DepartmentDAO {
             }
         }
         catch (SQLException e){
-            e.printStackTrace();
+
+            System.out.println("SQLException: " + e.getMessage());
         }
         catch (Exception e){
             System.out.println("Not a supported operation" + e.getMessage());
@@ -62,6 +63,72 @@ public class DepartmentDAO {
         catch (Exception e){
             System.out.println("Not a supported operation" + e.getMessage());
         }
+    }
+
+
+    public static boolean updateDepartment(Department department, int id)
+    {
+
+        String query = """
+                UPDATE department
+                SET department_name = ?, description = ?, location = ?
+                WHERE department_id = ?
+        """;
+
+        try(
+                Connection connection = DatabaseConnector.getConnection();
+                PreparedStatement statement = connection.prepareStatement(query)
+                )
+        {
+            statement.setString(1, department.getDepartmentName());
+            statement.setString(2, department.getDepartmentDescription());
+            statement.setString(3, department.getLocation());
+            statement.setInt(4, id);
+            int result = statement.executeUpdate();
+            if(result > 0)
+            {
+                System.out.println("Department has been updated");
+                return true;
+            }
+            else
+            {
+                System.out.println("Department has NOT been updated");
+            }
+        }
+        catch (Exception e){
+            System.out.println("Not a supported operation" + e.getMessage());
+        }
+
+        return false;
+    }
+
+    public static boolean deleteDepartment(int id)
+    {
+        String query = """
+                DELETE FROM department
+                WHERE department_id = ?
+        """;
+        try(Connection connection = DatabaseConnector.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query);
+        )
+        {
+            statement.setInt(1, id);
+            int result = statement.executeUpdate();
+            if(result > 0)
+            {
+                System.out.println("Department has been deleted");
+                return true;
+            }
+            else
+            {
+                System.out.println("Department has NOT been deleted");
+            }
+
+        }
+        catch (Exception e){
+            System.out.println("Not a supported operation" + e.getMessage());
+        }
+        return false;
     }
 
     

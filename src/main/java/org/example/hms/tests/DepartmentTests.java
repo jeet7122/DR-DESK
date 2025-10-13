@@ -13,4 +13,10 @@ public class DepartmentTests {
     public static List<Department> getAllDepartments(){
         return DepartmentDAO.getAllDepartments();
     }
+    public static boolean deleteDepartment(int department_id){
+        return DepartmentDAO.deleteDepartment(department_id);
+    }
+    public static boolean updateDepartment(Department department, int department_id){
+        return DepartmentDAO.updateDepartment(department, department_id);
+    }
 }

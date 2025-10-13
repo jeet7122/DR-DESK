@@ -108,8 +108,8 @@ public class PatientDAO {
                 )
         {
             statement.setInt(1, id);
-            boolean executed = statement.execute();
-            if (executed){
+            int executed = statement.executeUpdate();
+            if (executed > 0){
                 System.out.println("Successfully deleted patient with id " + id);
             }
             else {
