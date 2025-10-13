@@ -12,11 +12,22 @@ public class MainScreenApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         MedicalRecord medicalRecord = new MedicalRecord();
-        medicalRecord.setPatientId(6);
-        medicalRecord.setCondition("Cold and Cough");
-        medicalRecord.setDescription("has a little bit of cold and soar throat");
+        medicalRecord.setPatientId(8);
+        medicalRecord.setCondition("Thyroid");
+        medicalRecord.setDescription("has a little to higher than normal");
         medicalRecord.setCurrentStatus("Normal");
         MedicalRecordsTest.AddMedicalRecordTest(medicalRecord);
+
+        MedicalRecord recordToUpdate = new MedicalRecord();
+        recordToUpdate.setPatientId(6);
+        recordToUpdate.setCondition("Cold and Cough");
+        recordToUpdate.setCurrentStatus("Severe");
+        recordToUpdate.setDescription("has a little bit of cold and more soar throat");
+        MedicalRecordsTest.updateMedicalRecordsTest(recordToUpdate, 1);
+
+
+
         MedicalRecordsTest.getAllMedicalRecordsTest();
+
     }
 }

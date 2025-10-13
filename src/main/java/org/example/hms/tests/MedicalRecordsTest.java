@@ -17,4 +17,13 @@ public class MedicalRecordsTest {
             System.out.println(medicalRecord);
         }
     }
+
+    public static void deleteMedicalRecordsTest(){
+        int id = 1;
+        MedicalRecordsDAO.deleteMedicalRecord(id);
+    }
+
+    public static void updateMedicalRecordsTest(MedicalRecord medicalRecord, int id){
+        MedicalRecordsDAO.updateMedicalRecord(medicalRecord,id);
+    }
 }
