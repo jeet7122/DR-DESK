@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import org.example.hms.dao.PatientDAO;
 import org.example.hms.models.Patient;
+import org.example.hms.tests.Patients;
 import org.example.hms.utils.DatabaseConnector;
 
 import java.io.IOException;
@@ -22,14 +23,14 @@ public class MainScreenApplication extends Application {
                 System.out.println("Database not connected.");
             }
             Patient p  = new Patient();
-            p.setFirstName("Khushi");
-            p.setLastName("Parikh");
-            p.setAge(20);
-            p.setGender("Female");
+            p.setFirstName("Harsh");
+            p.setLastName("Thakkar");
+            p.setAge(30);
+            p.setGender("Male");
             p.setAddress("1630 College Avenue");
-            p.setBloodGroup("B+");
-            p.setHasChronicDisease(true);
-            p.setEmail("khushiparikh@gmail.com");
+            p.setBloodGroup("A+");
+            p.setHasChronicDisease(false);
+            p.setEmail("h@123@x-mail.com");
 
             boolean inserted = PatientDAO.insertPatient(p);
             if(inserted){
@@ -38,6 +39,8 @@ public class MainScreenApplication extends Application {
             else{
                 System.out.println("Patient insert failed.");
             }
+
+            Patients.updatePatient("Khushi", "Parikh", "k@123@x-mail.com", 8);
             List<Patient> patients = PatientDAO.getAllPatients();
             patients.forEach(System.out::println);
 

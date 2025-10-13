@@ -41,7 +41,7 @@ public class PatientDAO {
 
         try(Connection connection = DatabaseConnector.getConnection();
             Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(sql);){
+            ResultSet rs = statement.executeQuery(sql)){
 
             while(rs.next()){
                 Patient p = new Patient();
@@ -63,5 +63,36 @@ public class PatientDAO {
             e.printStackTrace();
         }
         return patients;
+    }
+
+    public static boolean updatePatient(String firstName, String lastName, String email ,int id){
+
+        String sql = """
+                UPDATE patients
+                SET first_name = ?, last_name = ?, email = ?
+                WHERE id = ?""";
+        try(Connection connection = DatabaseConnector.getConnection();
+        PreparedStatement statement = connection.prepareStatement(sql))
+        {
+            statement.setString(1, firstName);
+            statement.setString(2, lastName);
+            statement.setString(3, email);
+            statement.setInt(4, id);
+
+            int rows = statement.executeUpdate();
+
+            if(rows > 0){
+                System.out.println("Successfully updated patient with id " + id);
+                return true;
+            }
+            else {
+                System.out.println("Failed to update patient with id " + id);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 }
