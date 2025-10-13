@@ -8,6 +8,7 @@ import org.example.hms.utils.DatabaseConnector;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.util.List;
 
 public class MainScreenApplication extends Application {
     @Override
@@ -21,14 +22,14 @@ public class MainScreenApplication extends Application {
                 System.out.println("Database not connected.");
             }
             Patient p  = new Patient();
-            p.setFirstName("Jeet");
-            p.setLastName("Thakkar");
-            p.setAge(21);
-            p.setGender("Male");
+            p.setFirstName("Khushi");
+            p.setLastName("Parikh");
+            p.setAge(20);
+            p.setGender("Female");
             p.setAddress("1630 College Avenue");
             p.setBloodGroup("B+");
             p.setHasChronicDisease(true);
-            p.setEmail("jeetthakkar2612@gmail.com");
+            p.setEmail("khushiparikh@gmail.com");
 
             boolean inserted = PatientDAO.insertPatient(p);
             if(inserted){
@@ -37,6 +38,8 @@ public class MainScreenApplication extends Application {
             else{
                 System.out.println("Patient insert failed.");
             }
+            List<Patient> patients = PatientDAO.getAllPatients();
+            patients.forEach(System.out::println);
 
         }
         catch (Exception e) {

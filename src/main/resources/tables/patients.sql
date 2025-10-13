@@ -9,3 +9,6 @@ CREATE TABLE patients(
     has_chronic_disease BOOLEAN,
     registration_date TIMESTAMP DEFAULT current_timestamp
 );
+
+ALTER TABLE patients
+ADD COLUMN email VARCHAR(100) UNIQUE

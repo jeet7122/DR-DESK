@@ -7,10 +7,10 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class DatabaseConnector {
-    private static Connection connection;
     private DatabaseConnector() {}
 
     public static Connection getConnection() throws SQLException, ClassNotFoundException {
+        Connection connection = null;
         if (connection == null) {
             try(InputStream inputStream = DatabaseConnector.class.getResourceAsStream("/config.properties")) {
                 Properties prop = new Properties();
@@ -27,15 +27,5 @@ public class DatabaseConnector {
             }
         }
         return connection;
-    }
-    public static void closeConnection() {
-        try {
-            if (connection != null && !connection.isClosed()) {
-                connection.close();
-                System.out.println("🔒 Database connection closed.");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }
