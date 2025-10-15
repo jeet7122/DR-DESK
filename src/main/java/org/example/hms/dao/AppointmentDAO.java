@@ -45,10 +45,67 @@ public class AppointmentDAO implements GenericDAO<Appointment> {
     @Override
     public void update(Appointment obj, int id) {
 
+        String query = """
+                UPDATE appointment
+                SET doctor_id = ?, patient_id = ?, appointment_date_and_time = ?, status = ?, notes = ?
+                WHERE appointment_id = ?
+                """;
+        try(
+                Connection con = DatabaseConnector.getConnection();
+                PreparedStatement ps = con.prepareStatement(query)
+                )
+        {
+            ps.setInt(1, obj.getDoctorId());
+            ps.setInt(2, obj.getPatientId());
+            ps.setObject(3, obj.getAppointmentDate(), Types.TIMESTAMP);
+            ps.setString(4, obj.getStatus().toString());
+            ps.setString(5, obj.getNotes());
+            ps.setInt(6, id);
+
+            int rows = ps.executeUpdate();
+            if (rows > 0) {
+                System.out.println("Appointment updated successfully!");
+            }
+            else {
+                System.out.println("Appointment update failed!");
+            }
+        }
+        catch (SQLException e){
+            System.out.println("SQLException: "  + e.getMessage());
+        }
+        catch (Exception e) {
+            System.out.println("Exception: "  + e.getMessage());
+        }
+
+
     }
 
     @Override
     public void delete(int id) {
+        String query = """
+                DELETE FROM appointment WHERE appointment_id = ?
+        """;
+        try(
+                Connection con = DatabaseConnector.getConnection();
+                PreparedStatement ps = con.prepareStatement(query)
+                )
+        {
+            ps.setInt(1, id);
+            int rows =  ps.executeUpdate();
+            if (rows > 0) {
+                System.out.println("Appointment with id: " + id + " has been deleted");
+            }
+            else  {
+                System.out.println("Deletion failed");
+            }
+
+        }
+        catch (SQLException e){
+            System.out.println("SQLException: "  + e.getMessage());
+        }
+        catch (Exception e) {
+            System.out.println("Exception: "  + e.getMessage());
+        }
 
     }
 
