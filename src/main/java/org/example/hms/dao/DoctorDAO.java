@@ -8,8 +8,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DoctorDAO {
-    public static void InsertDoctor(Doctor doctor) {
+public class DoctorDAO implements GenericDAO<Doctor> {
+
+    @Override
+    public void insert(Doctor doctor) {
         String sql = """
                 INSERT INTO doctors
                 (first_name, last_name, email, specialization, contact_number, address, department_id, is_available)
@@ -19,7 +21,7 @@ public class DoctorDAO {
         try (
                 Connection conn = DatabaseConnector.getConnection();
                 PreparedStatement statement = conn.prepareStatement(sql)
-                )
+        )
         {
 
             statement.setString(1, doctor.getFirstName());
@@ -41,42 +43,8 @@ public class DoctorDAO {
         }
     }
 
-    public static List<Doctor> GetAllDoctors() {
-        String sql = """
-                SELECT * FROM doctors
-        """;
-        List<Doctor> doctors = new ArrayList<>();
-        try(
-                Connection conn = DatabaseConnector.getConnection();
-                PreparedStatement statement = conn.prepareStatement(sql);
-                ResultSet rs = statement.executeQuery()
-                )
-        {
-            while (rs.next()) {
-                Doctor doctor = new Doctor();
-                doctor.setId(rs.getInt("doctor_id"));
-                doctor.setFirstName(rs.getString("first_name"));
-                doctor.setLastName(rs.getString("last_name"));
-                doctor.setEmail(rs.getString("email"));
-                doctor.setSpecialization(rs.getString("specialization"));
-                doctor.setContactNumber(rs.getString("contact_number"));
-                doctor.setAddress(rs.getString("address"));
-                doctor.setDepartmentId(rs.getInt("department_id"));
-                doctor.setAvailable(rs.getBoolean("is_available"));
-                doctor.setJoiningDate(rs.getObject("joining_date", LocalDate.class));
-                doctors.add(doctor);
-            }
-        }
-        catch (SQLException ex) {
-            System.out.println("SQLException: " + ex.getMessage());
-        }
-        catch (Exception e) {
-            System.out.println("Generic Exception: " + e.getMessage());
-        }
-        return doctors;
-    }
-
-    public static void UpdateDoctor(Doctor doctor, int doc_id) {
+    @Override
+    public void update(Doctor doctor, int doc_id) {
         String sql = """
                 UPDATE doctors
                 SET first_name = ?, last_name = ?, email = ?, contact_number = ?, specialization = ?, address = ?, department_id = ? ,is_available = ?
@@ -87,7 +55,7 @@ public class DoctorDAO {
                 (
                         Connection connection = DatabaseConnector.getConnection();
                         PreparedStatement statement = connection.prepareStatement(sql)
-                        )
+                )
         {
             statement.setString(1, doctor.getFirstName());
             statement.setString(2, doctor.getLastName());
@@ -114,7 +82,8 @@ public class DoctorDAO {
         }
     }
 
-    public static void DeleteDoctor(int doc_id) {
+    @Override
+    public void delete(int id) {
         String sql = """
                 DELETE FROM doctors
                 WHERE doctor_id = ?;
@@ -123,9 +92,9 @@ public class DoctorDAO {
                 (
                         Connection connection = DatabaseConnector.getConnection();
                         PreparedStatement statement = connection.prepareStatement(sql)
-                        )
+                )
         {
-            statement.setInt(1, doc_id);
+            statement.setInt(1, id);
             int deleted = statement.executeUpdate();
             if (deleted > 0) {
                 System.out.println("Doctor Deleted Successfully!");
@@ -140,5 +109,42 @@ public class DoctorDAO {
         catch (Exception e) {
             System.out.println("Generic Exception: " + e.getMessage());
         }
+
+    }
+
+    @Override
+    public List<Doctor> getAll() {
+        String sql = """
+                SELECT * FROM doctors
+        """;
+        List<Doctor> doctors = new ArrayList<>();
+        try(
+                Connection conn = DatabaseConnector.getConnection();
+                PreparedStatement statement = conn.prepareStatement(sql);
+                ResultSet rs = statement.executeQuery()
+        )
+        {
+            while (rs.next()) {
+                Doctor doctor = new Doctor();
+                doctor.setId(rs.getInt("doctor_id"));
+                doctor.setFirstName(rs.getString("first_name"));
+                doctor.setLastName(rs.getString("last_name"));
+                doctor.setEmail(rs.getString("email"));
+                doctor.setSpecialization(rs.getString("specialization"));
+                doctor.setContactNumber(rs.getString("contact_number"));
+                doctor.setAddress(rs.getString("address"));
+                doctor.setDepartmentId(rs.getInt("department_id"));
+                doctor.setAvailable(rs.getBoolean("is_available"));
+                doctor.setJoiningDate(rs.getObject("joining_date", LocalDate.class));
+                doctors.add(doctor);
+            }
+        }
+        catch (SQLException ex) {
+            System.out.println("SQLException: " + ex.getMessage());
+        }
+        catch (Exception e) {
+            System.out.println("Generic Exception: " + e.getMessage());
+        }
+        return doctors;
     }
 }

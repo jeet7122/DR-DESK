@@ -6,17 +6,18 @@ import org.example.hms.models.Department;
 import java.util.List;
 
 public class DepartmentTests {
+    DepartmentDAO dao = new DepartmentDAO();
 
-    public static void AddDepartmentTest(Department department){
-        DepartmentDAO.addDepartment(department);
+    public void AddDepartmentTest(Department department){
+
     }
-    public static List<Department> getAllDepartments(){
-        return DepartmentDAO.getAllDepartments();
+    public List<Department> getAllDepartments(){
+        return dao.getAll();
     }
-    public static boolean deleteDepartment(int department_id){
-        return DepartmentDAO.deleteDepartment(department_id);
+    public void deleteDepartment(int department_id){
+         dao.delete(department_id);
     }
-    public static boolean updateDepartment(Department department, int department_id){
-        return DepartmentDAO.updateDepartment(department, department_id);
+    public void updateDepartment(Department department, int department_id){
+        dao.update(department, department_id);
     }
 }

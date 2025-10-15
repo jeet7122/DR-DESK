@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PatientDAO {
-    public static boolean insertPatient(Patient p){
+public class PatientDAO implements GenericDAO<Patient> {
+    public void insert(Patient p){
         String sql = "INSERT INTO patients(first_name, last_name, age, gender, address, blood_group, has_chronic_disease, email) VALUES (?,?,?,?,?,?,?,?)";
 
         try(Connection connection = DatabaseConnector.getConnection();
@@ -27,15 +27,48 @@ public class PatientDAO {
             statement.setBoolean(7, p.isHasChronicDisease());
             statement.setString(8,p.getEmail());
             statement.execute();
-            return true;
         }
         catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Error in inserting patient into table: " + e.getMessage());
         }
-        return false;
     }
 
-    public static List<Patient> getAllPatients(){
+    @Override
+    public void update(Patient obj, int id) {
+        String sql = """
+                UPDATE patients
+                SET first_name = ?, last_name = ?, age = ? , gender = ?, blood_group = ?, has_chronic_disease = ?
+                WHERE id = ?
+                """;
+
+        try
+                (
+                        Connection connection = DatabaseConnector.getConnection();
+                        PreparedStatement statement = connection.prepareStatement(sql)
+                        )
+        {
+            statement.setString(1, obj.getFirstName());
+            statement.setString(2, obj.getLastName());
+            statement.setInt(3, obj.getAge());
+            statement.setString(4, obj.getGender());
+            statement.setString(5, obj.getBloodGroup());
+            statement.setBoolean(6, obj.isHasChronicDisease());
+            statement.setInt(7, id);
+            int row = statement.executeUpdate();
+            if (row > 0) {
+                System.out.println("Patient updated successfully!");
+            }
+            else {
+                System.out.println("Patient update failed!");
+            }
+
+        }
+        catch (Exception e) {
+            System.out.println("Error in updating a patient into table: " + e.getMessage());
+        }
+    }
+
+    public List<Patient> getAll(){
         List<Patient> patients = new ArrayList<>();
         String sql = "SELECT * FROM patients ORDER BY id";
 
@@ -60,7 +93,7 @@ public class PatientDAO {
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Error fetching patient from table: " + e.getMessage());
         }
         return patients;
     }
@@ -90,13 +123,13 @@ public class PatientDAO {
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Error:  " + e.getMessage());
         }
 
         return false;
     }
 
-    public static void deletePatient(int id){
+    public void delete(int id){
         String sql = """
                 DELETE FROM patients
                 WHERE id = ?
@@ -104,7 +137,7 @@ public class PatientDAO {
 
         try(
                 Connection conn = DatabaseConnector.getConnection();
-                PreparedStatement statement = conn.prepareStatement(sql);
+                PreparedStatement statement = conn.prepareStatement(sql)
                 )
         {
             statement.setInt(1, id);
@@ -118,7 +151,7 @@ public class PatientDAO {
         }
 
         catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Error: " + e.getMessage());
         }
 
     }

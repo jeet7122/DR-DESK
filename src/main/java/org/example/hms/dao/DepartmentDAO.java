@@ -7,9 +7,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DepartmentDAO {
+public class DepartmentDAO implements GenericDAO<Department> {
 
-    public static List<Department> getAllDepartments()
+    public List<Department> getAll()
     {
         List<Department> departments = new ArrayList<>();
         String query = "SELECT * FROM Department";
@@ -42,7 +42,7 @@ public class DepartmentDAO {
     }
 
 
-    public static void addDepartment(Department department)
+    public void insert(Department department)
     {
         String sql = """
                 INSERT INTO department
@@ -66,7 +66,7 @@ public class DepartmentDAO {
     }
 
 
-    public static boolean updateDepartment(Department department, int id)
+    public void update(Department department, int id)
     {
 
         String query = """
@@ -88,7 +88,6 @@ public class DepartmentDAO {
             if(result > 0)
             {
                 System.out.println("Department has been updated");
-                return true;
             }
             else
             {
@@ -98,18 +97,16 @@ public class DepartmentDAO {
         catch (Exception e){
             System.out.println("Not a supported operation" + e.getMessage());
         }
-
-        return false;
     }
 
-    public static boolean deleteDepartment(int id)
+    public void delete(int id)
     {
         String query = """
                 DELETE FROM department
                 WHERE department_id = ?
         """;
         try(Connection connection = DatabaseConnector.getConnection();
-        PreparedStatement statement = connection.prepareStatement(query);
+        PreparedStatement statement = connection.prepareStatement(query)
         )
         {
             statement.setInt(1, id);
@@ -117,7 +114,6 @@ public class DepartmentDAO {
             if(result > 0)
             {
                 System.out.println("Department has been deleted");
-                return true;
             }
             else
             {
@@ -128,7 +124,6 @@ public class DepartmentDAO {
         catch (Exception e){
             System.out.println("Not a supported operation" + e.getMessage());
         }
-        return false;
     }
 
     

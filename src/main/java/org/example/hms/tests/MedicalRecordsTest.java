@@ -6,24 +6,24 @@ import org.example.hms.models.MedicalRecord;
 import java.util.List;
 
 public class MedicalRecordsTest {
+    MedicalRecordsDAO dao = new MedicalRecordsDAO();
 
-    public static void AddMedicalRecordTest(MedicalRecord medicalRecord){
-        MedicalRecordsDAO.AddMedicalRecord(medicalRecord);
+    public void AddMedicalRecordTest(MedicalRecord medicalRecord){
+        dao.insert(medicalRecord);
     }
 
-    public static void getAllMedicalRecordsTest(){
-        List<MedicalRecord> records =  MedicalRecordsDAO.getMedicalRecords();
+    public void getAllMedicalRecordsTest(){
+        List<MedicalRecord> records = dao.getAll();
         for(MedicalRecord medicalRecord : records){
             System.out.println(medicalRecord);
         }
     }
 
-    public static void deleteMedicalRecordsTest(){
-        int id = 1;
-        MedicalRecordsDAO.deleteMedicalRecord(id);
+    public void deleteMedicalRecordsTest(int id){
+        dao.delete(id);
     }
 
-    public static void updateMedicalRecordsTest(MedicalRecord medicalRecord, int id){
-        MedicalRecordsDAO.updateMedicalRecord(medicalRecord,id);
+    public void updateMedicalRecordsTest(MedicalRecord medicalRecord, int id){
+        dao.update(medicalRecord, id);
     }
 }

@@ -6,14 +6,12 @@ import org.example.hms.utils.DatabaseConnector;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MedicalRecordsDAO {
-    public static void AddMedicalRecord(MedicalRecord medicalRecord){
+public class MedicalRecordsDAO implements GenericDAO<MedicalRecord> {
+    public void insert(MedicalRecord medicalRecord){
         String query = """
                 INSERT INTO medical_records
                 (patient_id, condition, description, current_status)
@@ -43,14 +41,14 @@ public class MedicalRecordsDAO {
         }
     }
 
-    public static List<MedicalRecord> getMedicalRecords(){
+    public List<MedicalRecord> getAll(){
         String query = """
                 SELECT * FROM medical_records
         """;
         List<MedicalRecord> medicalRecords = new ArrayList<>();
         try(Connection connection = DatabaseConnector.getConnection();
             PreparedStatement statement = connection.prepareStatement(query);
-            ResultSet resultSet = statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery()
         )
         {
             while (resultSet.next()){
@@ -71,7 +69,7 @@ public class MedicalRecordsDAO {
         return medicalRecords;
     }
 
-    public static void updateMedicalRecord(MedicalRecord medicalRecord, int id){
+    public void update(MedicalRecord medicalRecord, int id){
 
         String query = """
                 UPDATE medical_records
@@ -104,7 +102,7 @@ public class MedicalRecordsDAO {
         }
     }
 
-    public static void deleteMedicalRecord(int id){
+    public void delete(int id){
 
         String query = """
                 DELETE FROM medical_records
