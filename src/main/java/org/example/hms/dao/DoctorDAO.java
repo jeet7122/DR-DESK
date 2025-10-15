@@ -17,7 +17,7 @@ public class DoctorDAO {
         """;
         try (
                 Connection conn = DatabaseConnector.getConnection();
-                PreparedStatement statement = conn.prepareStatement(sql);
+                PreparedStatement statement = conn.prepareStatement(sql)
                 )
         {
 
@@ -40,7 +40,7 @@ public class DoctorDAO {
         }
     }
 
-    public List<Doctor> GetAllDoctors() {
+    public static List<Doctor> GetAllDoctors() {
         String sql = """
                 SELECT * FROM doctors
                 ORDER BY doctor_id
@@ -49,7 +49,7 @@ public class DoctorDAO {
         try(
                 Connection conn = DatabaseConnector.getConnection();
                 PreparedStatement statement = conn.prepareStatement(sql);
-                ResultSet rs = statement.executeQuery();
+                ResultSet rs = statement.executeQuery()
                 )
         {
             while (rs.next()) {
@@ -73,5 +73,71 @@ public class DoctorDAO {
             System.out.println("Generic Exception: " + e.getMessage());
         }
         return doctors;
+    }
+
+    public static void UpdateDoctor(Doctor doctor, int doc_id) {
+        String sql = """
+                UPDATE doctors
+                SET first_name = ?, last_name = ?, email = ?, contact_number = ?, specialization = ?, address = ?, is_available = ?
+                WHERE doctor_id = ?;
+        """;
+
+        try
+                (
+                        Connection connection = DatabaseConnector.getConnection();
+                        PreparedStatement statement = connection.prepareStatement(sql)
+                        )
+        {
+            statement.setString(1, doctor.getFirstName());
+            statement.setString(2, doctor.getLastName());
+            statement.setString(3, doctor.getEmail());
+            statement.setString(4, doctor.getContactNumber());
+            statement.setString(5, doctor.getSpecialization());
+            statement.setString(6, doctor.getAddress());
+            statement.setInt(7, doctor.getDepartmentId());
+            statement.setBoolean(8, doctor.isAvailable());
+            statement.setInt(9, doc_id);
+            int updated = statement.executeUpdate();
+            if (updated > 0) {
+                System.out.println("Doctor Updated Successfully!");
+            }
+            else {
+                System.out.println("Doctor Updated Failed!");
+            }
+        }
+        catch (SQLException ex) {
+            System.out.println("SQLException: " + ex.getMessage());
+        }
+        catch (Exception e) {
+            System.out.println("Generic Exception: " + e.getMessage());
+        }
+    }
+
+    public static void DeleteDoctor(int doc_id) {
+        String sql = """
+                DELETE FROM doctors
+                WHERE doctor_id = ?;
+        """;
+        try
+                (
+                        Connection connection = DatabaseConnector.getConnection();
+                        PreparedStatement statement = connection.prepareStatement(sql)
+                        )
+        {
+            statement.setInt(1, doc_id);
+            int deleted = statement.executeUpdate();
+            if (deleted > 0) {
+                System.out.println("Doctor Deleted Successfully!");
+            }
+            else {
+                System.out.println("Doctor Deleted Failed!");
+            }
+        }
+        catch (SQLException ex) {
+            System.out.println("SQLException: " + ex.getMessage());
+        }
+        catch (Exception e) {
+            System.out.println("Generic Exception: " + e.getMessage());
+        }
     }
 }
