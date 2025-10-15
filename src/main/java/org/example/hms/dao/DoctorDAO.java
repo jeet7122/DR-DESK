@@ -4,6 +4,7 @@ import org.example.hms.models.Doctor;
 import org.example.hms.utils.DatabaseConnector;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +44,6 @@ public class DoctorDAO {
     public static List<Doctor> GetAllDoctors() {
         String sql = """
                 SELECT * FROM doctors
-                ORDER BY doctor_id
         """;
         List<Doctor> doctors = new ArrayList<>();
         try(
@@ -63,6 +63,7 @@ public class DoctorDAO {
                 doctor.setAddress(rs.getString("address"));
                 doctor.setDepartmentId(rs.getInt("department_id"));
                 doctor.setAvailable(rs.getBoolean("is_available"));
+                doctor.setJoiningDate(rs.getObject("joining_date", LocalDate.class));
                 doctors.add(doctor);
             }
         }
@@ -78,7 +79,7 @@ public class DoctorDAO {
     public static void UpdateDoctor(Doctor doctor, int doc_id) {
         String sql = """
                 UPDATE doctors
-                SET first_name = ?, last_name = ?, email = ?, contact_number = ?, specialization = ?, address = ?, is_available = ?
+                SET first_name = ?, last_name = ?, email = ?, contact_number = ?, specialization = ?, address = ?, department_id = ? ,is_available = ?
                 WHERE doctor_id = ?;
         """;
 

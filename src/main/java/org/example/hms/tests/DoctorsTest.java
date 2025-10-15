@@ -3,6 +3,8 @@ package org.example.hms.tests;
 import org.example.hms.dao.DoctorDAO;
 import org.example.hms.models.Doctor;
 
+import java.util.List;
+
 public class DoctorsTest {
     public static void TestInsertDoctor(Doctor doctor) {
         DoctorDAO.InsertDoctor(doctor);
@@ -13,7 +15,7 @@ public class DoctorsTest {
     public static void TestDeleteDoctor(int id) {
         DoctorDAO.DeleteDoctor(id);
     }
-    public static void TestGetAllDoctor() {
-        DoctorDAO.GetAllDoctors();
+    public static List<Doctor> TestGetAllDoctor() {
+        return DoctorDAO.GetAllDoctors();
     }
 }
