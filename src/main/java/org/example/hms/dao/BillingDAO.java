@@ -57,11 +57,75 @@ public class BillingDAO implements GenericDAO<Billing>{
 
     @Override
     public void update(Billing obj, int id) {
+        String sql = """
+                UPDATE billing
+                SET appointment_id = ?, patient_id = ?, consultation_fee = ?, medicine_fee = ?, service_fee = ?, total_amount = ?, paid = ?
+                WHERE bill_id = ?
+        """;
+        try(
+                Connection connection = DatabaseConnector.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)
+                )
+        {
+            statement.setInt(1,obj.getAppointmentId());
+            statement.setInt(2,obj.getPatientId());
+            statement.setDouble(3,obj.getConsultationFee());
+            statement.setDouble(4,obj.getMedicineFee());
+            statement.setDouble(5,obj.getServiceFee());
+            statement.setDouble(6,obj.getConsultationFee() + obj.getMedicineFee() + obj.getServiceFee());
+            statement.setBoolean(7,obj.isPaid());
+            statement.setInt(8,id);
+            int rows =  statement.executeUpdate();
+            if(rows > 0)
+            {
+                System.out.println("Updated successfully");
+            }
+            else
+            {
+                System.out.println("Update failed");
+            }
+        }
+        catch (SQLException e){
+            System.out.println("SQLException: " + e.getMessage());
+        }
+        catch (Exception e){
+            System.out.println("Exception: " + e.getMessage());
+        }
+
 
     }
 
     @Override
     public void delete(int id) {
+        String sql = """
+                DELETE FROM billing
+                WHERE bill_id = ?
+        """;
+        try
+                (
+                        Connection connection = DatabaseConnector.getConnection();
+                        PreparedStatement statement = connection.prepareStatement(sql)
+                        )
+        {
+            statement.setInt(1, id);
+            int rows =  statement.executeUpdate();
+            if(rows > 0)
+            {
+                System.out.println("Deleted Successfully");
+            }
+            else
+            {
+                System.out.println("Delete failed");
+            }
+
+        }
+        catch (SQLException e){
+            System.out.println("SQLException: " + e.getMessage());
+        }
+        catch (Exception e){
+            System.out.println("Exception: " + e.getMessage());
+        }
+
 
     }
 
