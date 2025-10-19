@@ -14,4 +14,11 @@ public class BillingTest {
         List<Billing> bills = billingDAO.getAll();
         bills.forEach(System.out::println);
     }
+
+    public void TestUpdate(Billing bill, int id){
+        billingDAO.update(bill, id);
+    }
+    public void TestDelete(int id){
+        billingDAO.delete(id);
+    }
 }
