@@ -3,4 +3,5 @@ module org.example.hms {
     requires java.sql;
 
     exports org.example.hms;
+    exports org.example.hms.dto;
 }
