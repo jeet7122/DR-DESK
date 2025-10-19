@@ -32,7 +32,7 @@ public class BillingDAO implements GenericDAO<Billing>{
             statement.setDouble(3,obj.getConsultationFee());
             statement.setDouble(4,obj.getMedicineFee());
             statement.setDouble(5,obj.getServiceFee());
-            statement.setDouble(6,obj.getTotalAmount());
+            statement.setDouble(6,obj.getConsultationFee() + obj.getMedicineFee() + obj.getServiceFee());
             statement.setBoolean(7,obj.isPaid());
             int rows =  statement.executeUpdate();
             if(rows > 0)
