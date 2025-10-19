@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,6 +89,7 @@ public class BillingDAO implements GenericDAO<Billing>{
                 billing.setServiceFee(resultSet.getDouble("service_fee"));
                 billing.setTotalAmount(resultSet.getDouble("total_amount"));
                 billing.setPaid(resultSet.getBoolean("paid"));
+                billing.setBillDate(resultSet.getObject("billing_date", LocalDateTime.class));
                 billings.add(billing);
             }
 

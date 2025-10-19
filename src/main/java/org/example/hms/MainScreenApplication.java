@@ -13,16 +13,6 @@ public class MainScreenApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         BillingTest test = new BillingTest();
-        Billing billing = new Billing();
-        billing.setAppointmentId(4);
-        billing.setPatientId(8);
-        billing.setConsultationFee(29.99);
-        billing.setMedicineFee(9.99);
-        billing.setServiceFee(1.99);
-        billing.setPaid(false);
-
-        test.TestInsert(billing);
-
-
+        test.TestGetAll();
     }
 }
