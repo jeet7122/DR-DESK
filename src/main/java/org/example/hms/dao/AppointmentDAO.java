@@ -1,5 +1,6 @@
 package org.example.hms.dao;
 
+import org.example.hms.Mappers;
 import org.example.hms.dto.AppointmentDTO;
 import org.example.hms.models.Appointment;
 import org.example.hms.models.Status;
@@ -11,7 +12,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AppointmentDAO implements GenericDAO<Appointment> {
+    private Mappers mappers =  new Mappers();
+    public AppointmentDAO(Mappers mappers) {
+        this.mappers = mappers;
+    }
 
+    public AppointmentDAO() {
+    }
 
     public void insertWithDTO(AppointmentDTO obj) {
         String query = """
@@ -156,14 +163,16 @@ public class AppointmentDAO implements GenericDAO<Appointment> {
         {
 
             while (rs.next()) {
-                Appointment obj = new Appointment();
+                AppointmentDTO obj = new AppointmentDTO();
                 obj.setAppointmentId(rs.getInt("appointment_id"));
                 obj.setDoctorId(rs.getInt("doctor_id"));
                 obj.setPatientId(rs.getInt("patient_id"));
                 obj.setAppointmentDate(rs.getObject("appointment_date_and_time", LocalDateTime.class));
                 obj.setNotes(rs.getString("notes"));
-                obj.setStatus(rs.getObject("status", Status.class));
-                appointments.add(obj);
+                obj.setStatus(rs.getString("status"));
+                Appointment app = mappers.mapFromDTO(obj);
+
+                appointments.add(app);
             }
         }
         catch (SQLException e){
