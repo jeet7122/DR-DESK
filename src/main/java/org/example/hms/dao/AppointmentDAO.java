@@ -1,5 +1,6 @@
 package org.example.hms.dao;
 
+import org.example.hms.dto.AppointmentDTO;
 import org.example.hms.models.Appointment;
 import org.example.hms.models.Status;
 import org.example.hms.utils.DatabaseConnector;
@@ -11,6 +12,36 @@ import java.util.List;
 
 public class AppointmentDAO implements GenericDAO<Appointment> {
 
+
+    public void insertWithDTO(AppointmentDTO obj) {
+        String query = """
+                INSERT INTO appointment
+                (doctor_id, patient_id, status, notes, appointment_date_and_time)
+                VALUES
+                (?, ?, ?, ?, ?)
+                """;
+
+        try
+                (
+                        Connection con = DatabaseConnector.getConnection();
+                        PreparedStatement ps = con.prepareStatement(query)
+                        )
+        {
+            ps.setInt(1, obj.getDoctorId());
+            ps.setInt(2, obj.getPatientId());
+            ps.setString(3, obj.getStatus());
+            ps.setString(4, obj.getNotes());
+            ps.setObject(5, obj.getAppointmentDate(), Types.TIMESTAMP);
+            ps.execute();
+        }
+        catch (SQLException e){
+            System.out.println("SQLException: "  + e.getMessage());
+        }
+        catch (Exception e) {
+            System.out.println("Exception: "  + e.getMessage());
+        }
+
+    }
     @Override
     public void insert(Appointment obj) {
         String query = """
@@ -24,7 +55,7 @@ public class AppointmentDAO implements GenericDAO<Appointment> {
                 (
                         Connection con = DatabaseConnector.getConnection();
                         PreparedStatement ps = con.prepareStatement(query)
-                        )
+                )
         {
             ps.setInt(1, obj.getDoctorId());
             ps.setInt(2, obj.getPatientId());
@@ -41,6 +72,8 @@ public class AppointmentDAO implements GenericDAO<Appointment> {
         }
 
     }
+
+
 
     @Override
     public void update(Appointment obj, int id) {
