@@ -59,6 +59,7 @@ cmake-build-*/
 # Markdown Navigator plugin
 .idea/**/markdown-navigator/
 
+src/main/resources/config.properties
 
 
 # Azure Toolkit for IntelliJ plugin
