@@ -19,7 +19,7 @@ public class DoctorFormView {
         root.setPadding(new Insets(20));
         root.setAlignment(Pos.TOP_CENTER);
 
-        Label title = new Label("Add / Edit Doctor");
+        Label title = new Label("Add Doctor");
         title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
 
         GridPane form = new GridPane();

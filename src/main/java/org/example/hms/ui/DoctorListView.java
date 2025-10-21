@@ -80,8 +80,12 @@ public class DoctorListView {
 
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         Button addBtn = new Button("Add Doctor");
+        Button updateBtn = new Button("Update Doctor");
+        Button deleteBtn = new Button("Delete Doctor");
+
+        updateBtn.setOnAction(e -> root.setCenter(new DoctorUpdateFormView().getView()));
         addBtn.setOnAction(e -> root.setCenter(new DoctorFormView().getView()));
-        HBox topBar = new HBox(10, addBtn);
+        HBox topBar = new HBox(10, addBtn, updateBtn, deleteBtn);
         topBar.setPadding(new Insets(10));
 
         root.setTop(topBar);
@@ -91,8 +95,6 @@ public class DoctorListView {
         table.setPlaceholder(new Label("No doctors found"));
 
         // TODO: Replace this with DAO call later:
-        // DoctorDAO dao = new DoctorDAO();
-        // doctors.setAll(dao.findAll());
         DoctorDAO dd =  new DoctorDAO();
         doctors.setAll(dd.getAll());
         table.setItems(doctors);
