@@ -1,127 +1,131 @@
 package org.example.hms.ui;
 
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
 import org.example.hms.dao.DoctorDAO;
 import org.example.hms.models.Doctor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class DoctorListView {
     private final BorderPane root;
-    private final ObservableList<Doctor> doctors;
     private final TableView<Doctor> table;
-    private final HBox hbox;
+    private final DoctorDAO doctorDAO;
+    private final int rowsPerPage = 10; // Records per page
+    private int currentPage = 1;
+    private int totalPages = 1;
+    private String currentSearchQuery = "";
+    private final Label pageInfoLabel = new Label();
+
     public DoctorListView() {
         root = new BorderPane();
         table = new TableView<>();
-        doctors = FXCollections.observableArrayList();
-        hbox = new HBox(10);
+        doctorDAO = new DoctorDAO();
 
+        setupColumns();
+        HBox searchBox = setupSearch();
+        HBox paginationBox = setupPagination();
 
-        TableColumn<Doctor, Integer>  idCol = new TableColumn<>("ID");
-        idCol.setCellValueFactory(
-                data ->
-                        new SimpleIntegerProperty(data.getValue().getId()).asObject()
-        );
+        root.setTop(searchBox);
+        root.setCenter(table);
+        root.setBottom(paginationBox);
 
-        TableColumn<Doctor, String>  firstNameCol = new TableColumn<>("First Name");
-        firstNameCol.setCellValueFactory(
-                data ->
-                        new SimpleStringProperty(data.getValue().getFirstName())
-        );
-        TableColumn<Doctor, String>  lastNameCol = new TableColumn<>("Last Name");
-        lastNameCol.setCellValueFactory(data ->
-                    new SimpleStringProperty(data.getValue().getLastName()));
-        TableColumn<Doctor, String>  emailCol = new TableColumn<>("Email");
-        emailCol.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getEmail()));
+        loadPage(currentPage, currentSearchQuery);
+    }
+
+    // -------------------- TABLE SETUP --------------------
+    private void setupColumns() {
+        TableColumn<Doctor, Integer> idCol = new TableColumn<>("ID");
+        idCol.setCellValueFactory(d -> new SimpleIntegerProperty(d.getValue().getId()).asObject());
+
+        TableColumn<Doctor, String> firstNameCol = new TableColumn<>("First Name");
+        firstNameCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getFirstName()));
+
+        TableColumn<Doctor, String> lastNameCol = new TableColumn<>("Last Name");
+        lastNameCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getLastName()));
+
+        TableColumn<Doctor, String> emailCol = new TableColumn<>("Email");
+        emailCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getEmail()));
 
         TableColumn<Doctor, String> specCol = new TableColumn<>("Specialization");
-        specCol.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getSpecialization()));
+        specCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getSpecialization()));
 
-        TableColumn<Doctor, String> contactCol = new TableColumn<>("Contact Number");
-        contactCol.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getContactNumber()));
+        TableColumn<Doctor, String> contactCol = new TableColumn<>("Contact");
+        contactCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getContactNumber()));
 
-        TableColumn<Doctor, String> addressCol = new TableColumn<>("Address");
-        addressCol.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getAddress()));
+        TableColumn<Doctor, LocalDate> joinDateCol = new TableColumn<>("Join Date");
+        joinDateCol.setCellValueFactory(d -> new SimpleObjectProperty<>(d.getValue().getJoiningDate()));
 
-        TableColumn<Doctor, Integer> deptCol = new TableColumn<>("Department ID");
-        deptCol.setCellValueFactory(data ->
-                new SimpleIntegerProperty(data.getValue().getDepartmentId()).asObject());
-
-        TableColumn<Doctor, LocalDate> joinDateCol = new TableColumn<>("Joining Date");
-        joinDateCol.setCellValueFactory(data ->
-                new SimpleObjectProperty<>(data.getValue().getJoiningDate()));
-
-        TableColumn<Doctor, Boolean> availableCol = new TableColumn<>("Available");
-        availableCol.setCellValueFactory(data ->
-                new SimpleBooleanProperty(data.getValue().isAvailable()));
-
-        // Add columns to table
-        table.getColumns().addAll(
-                idCol, firstNameCol, lastNameCol, emailCol,
-                specCol, contactCol, addressCol, deptCol,
-                joinDateCol, availableCol
-        );
-
+        table.getColumns().addAll(idCol, firstNameCol, lastNameCol, emailCol, specCol, contactCol, joinDateCol);
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-        root.setCenter(table);
-
-
-
-        // Placeholder text
         table.setPlaceholder(new Label("No doctors found"));
+    }
 
-        // TODO: Replace this with DAO call later:
-        DoctorDAO dd =  new DoctorDAO();
-        doctors.setAll(dd.getAll());
+    // -------------------- PAGINATION --------------------
+    private HBox setupPagination() {
+        Button prevButton = new Button("Previous");
+        Button nextButton = new Button("Next");
 
-        FilteredList<Doctor> filteredData = new FilteredList<>(doctors, p -> true);
-        table.setItems(filteredData);
+        prevButton.setOnAction(e -> {
+            if (currentPage > 1) {
+                currentPage--;
+                loadPage(currentPage, currentSearchQuery);
+            }
+        });
 
+        nextButton.setOnAction(e -> {
+            if (currentPage < totalPages) {
+                currentPage++;
+                loadPage(currentPage, currentSearchQuery);
+            }
+        });
+
+        HBox paginationBox = new HBox(10, prevButton, pageInfoLabel, nextButton);
+        paginationBox.setPadding(new Insets(10));
+        paginationBox.setStyle("-fx-alignment: center;");
+        return paginationBox;
+    }
+
+    // -------------------- SEARCH --------------------
+    private HBox setupSearch() {
         TextField searchField = new TextField();
-        searchField.setPromptText("Search");
+        searchField.setPromptText("Search by first or last name...");
         Button searchButton = new Button("Search");
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            String lcf = newValue.toLowerCase().trim();
-            filteredData.setPredicate(doctor -> {
-                if(lcf.isEmpty()) {
-                    return true;
-                }
-                return doctor.getFirstName().toLowerCase().contains(lcf) || doctor.getLastName().toLowerCase().contains(lcf);
-            });
+
+        // --- Dynamic live search ---
+        searchField.textProperty().addListener((obs, oldText, newText) -> {
+            currentSearchQuery = newText.trim();
+            currentPage = 1; // Reset page when new search
+            loadPage(currentPage, currentSearchQuery);
         });
-        searchButton.setOnAction(event -> {
-            String lcf = searchField.getText().toLowerCase().trim();
-            filteredData.setPredicate(doctor -> {
-                if(lcf.isEmpty()) {
-                    return true;
-                }
-                return doctor.getFirstName().toLowerCase().contains(lcf) || doctor.getLastName().toLowerCase().contains(lcf);
-            });
 
+        // --- Optional button (for explicit search) ---
+        searchButton.setOnAction(e -> {
+            currentSearchQuery = searchField.getText().trim();
+            currentPage = 1;
+            loadPage(currentPage, currentSearchQuery);
         });
-        hbox.getChildren().addAll(searchField, searchButton);
-        searchField.setPadding(new Insets(10, 10, 10, 10));
-        root.setTop(hbox);
 
+        HBox searchBox = new HBox(10, searchField, searchButton);
+        searchBox.setPadding(new Insets(10));
+        return searchBox;
+    }
 
+    // -------------------- DATA LOADING --------------------
+    private void loadPage(int pageNumber, String searchQuery) {
+        List<Doctor> pageData = doctorDAO.getDoctorsPaginated(searchQuery, rowsPerPage, pageNumber);
+        int totalRecords = doctorDAO.getTotalCount(searchQuery);
+        totalPages = (int) Math.ceil((double) totalRecords / rowsPerPage);
 
+        table.setItems(FXCollections.observableArrayList(pageData));
+
+        if (totalPages == 0) totalPages = 1; // Avoid divide-by-zero
+        pageInfoLabel.setText("Page " + currentPage + " of " + totalPages);
     }
 
     public Parent getView() {

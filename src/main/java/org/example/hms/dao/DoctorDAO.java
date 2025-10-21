@@ -147,4 +147,73 @@ public class DoctorDAO implements GenericDAO<Doctor> {
         }
         return doctors;
     }
+
+    public List<Doctor> getDoctorsPaginated(String searchQuery, int rowsPerPage, int pageNumber) {
+        List<Doctor> doctors = new ArrayList<>();
+        int offset = (pageNumber - 1) * rowsPerPage;
+
+        String sql = """
+            SELECT * FROM doctors
+            WHERE LOWER(first_name) LIKE ? OR LOWER(last_name) LIKE ?
+            ORDER BY doctor_id
+            LIMIT ? OFFSET ?
+        """;
+
+        try (Connection conn = DatabaseConnector.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            String query = "%" + searchQuery.toLowerCase() + "%";
+            stmt.setString(1, query);
+            stmt.setString(2, query);
+            stmt.setInt(3, rowsPerPage);
+            stmt.setInt(4, offset);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Doctor d = new Doctor(
+                        rs.getInt("doctor_id"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("email"),
+                        rs.getString("specialization"),
+                        rs.getString("contact_number"),
+                        rs.getString("address"),
+                        rs.getInt("department_id"),
+                        rs.getDate("joining_date").toLocalDate(),
+                        rs.getBoolean("is_available")
+                );
+                doctors.add(d);
+            }
+
+        }
+        catch (SQLException e) {
+            System.out.println("SQLException: " + e.getMessage());
+        }
+        catch (Exception e) {
+            System.out.println("Generic Exception: " + e.getMessage());
+        }
+
+        return doctors;
+    }
+
+    public int getTotalCount(String searchQuery) {
+        String sql = "SELECT COUNT(*) FROM doctors WHERE LOWER(first_name) LIKE ? OR LOWER(last_name) LIKE ?";
+        try (Connection conn = DatabaseConnector.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            String query = "%" + searchQuery.toLowerCase() + "%";
+            stmt.setString(1, query);
+            stmt.setString(2, query);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("SQLException: " + e.getMessage());
+        }
+        catch (Exception e) {
+            System.out.println("Generic Exception: " + e.getMessage());
+        }
+        return 0;
+    }
 }
