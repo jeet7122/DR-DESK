@@ -15,6 +15,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import org.example.hms.dao.DoctorDAO;
 import org.example.hms.models.Doctor;
 
 import java.time.LocalDate;
@@ -92,15 +93,8 @@ public class DoctorListView {
         // TODO: Replace this with DAO call later:
         // DoctorDAO dao = new DoctorDAO();
         // doctors.setAll(dao.findAll());
-        doctors.addAll(
-                new Doctor(1, "John", "Doe", "john.doe@hms.com",
-                        "Cardiology", "1234567890", "123 Main St",
-                        1, LocalDate.now(), true),
-                new Doctor(2, "Jane", "Smith", "jane.smith@hms.com",
-                        "Neurology", "9876543210", "45 Queen St",
-                        2, LocalDate.now(), false)
-        );
-
+        DoctorDAO dd =  new DoctorDAO();
+        doctors.setAll(dd.getAll());
         table.setItems(doctors);
     }
 

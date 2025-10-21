@@ -6,6 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import org.example.hms.dao.DoctorDAO;
 import org.example.hms.models.Doctor;
 
 import java.time.LocalDate;
@@ -71,6 +72,8 @@ public class DoctorFormView {
                         joiningDate.getValue(),
                         isAvailable.isSelected()
                 );
+                DoctorDAO dd = new DoctorDAO();
+                dd.insert(newDoctor);
 
                 // TODO: replace with DAO insert
                 new Alert(Alert.AlertType.INFORMATION,
