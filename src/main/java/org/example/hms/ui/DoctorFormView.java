@@ -79,6 +79,16 @@ public class DoctorFormView {
                 new Alert(Alert.AlertType.INFORMATION,
                         "Doctor saved successfully!").showAndWait();
 
+                firstName.clear();
+                lastName.clear();
+                email.clear();
+                specialization.clear();
+                contactNumber.clear();
+                address.clear();
+                departmentId.clear();
+                joiningDate.setValue(LocalDate.now());
+                isAvailable.setSelected(false);
+
             } catch (NumberFormatException ex) {
                 new Alert(Alert.AlertType.ERROR,
                         "Invalid Department ID! Please enter a number.").showAndWait();

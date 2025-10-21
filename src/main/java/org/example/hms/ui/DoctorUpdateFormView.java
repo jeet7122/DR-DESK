@@ -3,10 +3,7 @@ package org.example.hms.ui;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import org.example.hms.dao.DoctorDAO;
@@ -19,7 +16,7 @@ public class DoctorUpdateFormView {
         root = new VBox(15);
         root.setPadding(new Insets(20));
         root.setAlignment(Pos.TOP_CENTER);
-        Label title = new Label("Add Doctor");
+        Label title = new Label("Update Doctor");
         title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
         GridPane form = new GridPane();
         form.setHgap(10);
@@ -70,6 +67,20 @@ public class DoctorUpdateFormView {
 
                 DoctorDAO dao = new DoctorDAO();
                 dao.update(docToUpdate, Integer.parseInt(doc_id.getText()));
+                new Alert(Alert.AlertType.INFORMATION,
+                        "Doctor detail's updated successfully!").showAndWait();
+
+
+
+                doc_id.clear();
+                firstName.clear();
+                lastName.clear();
+                email.clear();
+                phone.clear();
+                address.clear();
+                specialization.clear();
+                department_id.clear();
+                isAvailable.setSelected(false);
 
             }
             catch (Exception ex) {
