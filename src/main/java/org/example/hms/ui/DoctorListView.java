@@ -6,12 +6,10 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import org.example.hms.dao.DoctorDAO;
@@ -23,10 +21,13 @@ public class DoctorListView {
     private final BorderPane root;
     private final ObservableList<Doctor> doctors;
     private final TableView<Doctor> table;
+    private final HBox hbox;
     public DoctorListView() {
         root = new BorderPane();
         table = new TableView<>();
         doctors = FXCollections.observableArrayList();
+        hbox = new HBox(10);
+
 
         TableColumn<Doctor, Integer>  idCol = new TableColumn<>("ID");
         idCol.setCellValueFactory(
@@ -78,17 +79,10 @@ public class DoctorListView {
         );
 
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        Button addBtn = new Button("Add Doctor");
-        Button updateBtn = new Button("Update Doctor");
-        Button deleteBtn = new Button("Delete Doctor");
 
-        updateBtn.setOnAction(e -> root.setCenter(new DoctorUpdateFormView().getView()));
-        addBtn.setOnAction(e -> root.setCenter(new DoctorFormView().getView()));
-        HBox topBar = new HBox(10, addBtn, updateBtn, deleteBtn);
-        topBar.setPadding(new Insets(10));
-
-        root.setTop(topBar);
         root.setCenter(table);
+
+
 
         // Placeholder text
         table.setPlaceholder(new Label("No doctors found"));
@@ -96,7 +90,38 @@ public class DoctorListView {
         // TODO: Replace this with DAO call later:
         DoctorDAO dd =  new DoctorDAO();
         doctors.setAll(dd.getAll());
-        table.setItems(doctors);
+
+        FilteredList<Doctor> filteredData = new FilteredList<>(doctors, p -> true);
+        table.setItems(filteredData);
+
+        TextField searchField = new TextField();
+        searchField.setPromptText("Search");
+        Button searchButton = new Button("Search");
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            String lcf = newValue.toLowerCase().trim();
+            filteredData.setPredicate(doctor -> {
+                if(lcf.isEmpty()) {
+                    return true;
+                }
+                return doctor.getFirstName().toLowerCase().contains(lcf) || doctor.getLastName().toLowerCase().contains(lcf);
+            });
+        });
+        searchButton.setOnAction(event -> {
+            String lcf = searchField.getText().toLowerCase().trim();
+            filteredData.setPredicate(doctor -> {
+                if(lcf.isEmpty()) {
+                    return true;
+                }
+                return doctor.getFirstName().toLowerCase().contains(lcf) || doctor.getLastName().toLowerCase().contains(lcf);
+            });
+
+        });
+        hbox.getChildren().addAll(searchField, searchButton);
+        searchField.setPadding(new Insets(10, 10, 10, 10));
+        root.setTop(hbox);
+
+
+
     }
 
     public Parent getView() {

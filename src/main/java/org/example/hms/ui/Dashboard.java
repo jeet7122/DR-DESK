@@ -3,6 +3,9 @@ package org.example.hms.ui;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
@@ -10,19 +13,54 @@ public class Dashboard {
     private final BorderPane root;
     public Dashboard() {
         root = new BorderPane();
-        VBox sidebar = new VBox(10);
-        sidebar.setStyle("-fx-background-color: #f4f6f8; -fx-padding: 15;");
-        Button docs = new Button("Doctors");
-        Button appointments = new Button("Appointments");
-        Button patients = new Button("Patients");
-        Button departments = new Button("Departments");
-        Button bills = new Button("Billing");
+        MenuBar navbar = new MenuBar();
+        Menu doctors = new Menu("Doctors");
+        MenuItem viewDoctors = new MenuItem("View Doctors");
+        MenuItem addDoctor = new MenuItem("Add Doctor");
+        MenuItem deleteDoctor = new MenuItem("Delete Doctor");
+        MenuItem updateDoctor = new MenuItem("Update Doctor");
+
+        doctors.getItems().addAll(viewDoctors, addDoctor, deleteDoctor, updateDoctor);
+
+        Menu Appointments = new Menu("Appointments");
+        MenuItem viewAllAppointments = new MenuItem("View Appointments");
+        MenuItem addAppointment = new MenuItem("Add Appointment");
+        MenuItem deleteAppointment = new MenuItem("Delete Appointment");
+        MenuItem updateAppointment = new MenuItem("Update Appointment");
+        Appointments.getItems().addAll(viewAllAppointments, addAppointment, deleteAppointment, updateAppointment);
 
 
-        docs.setOnAction(e -> root.setCenter(new DoctorListView().getView()));
+        Menu Patients = new Menu("Patients");
+        MenuItem viewPatients = new MenuItem("View Patients");
+        MenuItem addPatient = new MenuItem("Add Patient");
+        MenuItem deletePatient = new MenuItem("Delete Patient");
+        MenuItem updatePatient = new MenuItem("Update Patient");
+        Patients.getItems().addAll(viewPatients, addPatient, deletePatient, updatePatient);
 
-        sidebar.getChildren().addAll(docs, appointments, patients, departments, bills);
-        root.setLeft(sidebar);
+
+        Menu Departments = new Menu("Departments");
+        MenuItem viewDepartments = new MenuItem("View Departments");
+        MenuItem addDepartment = new MenuItem("Add Department");
+        MenuItem deleteDepartment = new MenuItem("Delete Department");
+        MenuItem updateDepartment = new MenuItem("Update Department");
+        Departments.getItems().addAll(viewDepartments, addDepartment, deleteDepartment, updateDepartment);
+
+        Menu Bills = new Menu("Bills");
+        MenuItem viewBills = new MenuItem("View Bills");
+        MenuItem addBill = new MenuItem("Add Bill");
+        MenuItem deleteBill = new MenuItem("Delete Bill");
+        MenuItem updateBill = new MenuItem("Update Bill");
+        Bills.getItems().addAll(viewBills, addBill, deleteBill, updateBill);
+
+        navbar.getMenus().addAll(doctors, Patients, Appointments, Departments, Bills);
+        root.setTop(navbar);
+
+
+
+
+        doctors.setOnAction(e -> root.setCenter(new DoctorListView().getView()));
+        addDoctor.setOnAction(e -> root.setCenter(new DoctorFormView().getView()));
+        updateDoctor.setOnAction(e -> root.setCenter(new DoctorUpdateFormView().getView()));
         root.setCenter(new DoctorListView().getView());
     }
     public Parent getView(){
