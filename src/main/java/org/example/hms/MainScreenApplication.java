@@ -2,7 +2,7 @@ package org.example.hms;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-
+import org.example.hms.tests.AuthTest;
 import org.example.hms.ui.SceneManager;
 
 
@@ -17,5 +17,6 @@ public class MainScreenApplication extends Application {
         stage.setTitle("DR-DESK - Hospital Management System");
         SceneManager.showDashboard();
         stage.show();
+
     }
 }
