@@ -3,6 +3,7 @@ package org.example.hms.services;
 import org.example.hms.dao.UsersDAO;
 import org.example.hms.models.User;
 import org.example.hms.models.UserRoles;
+import org.example.hms.utils.SessionManager;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class AuthService {
@@ -34,6 +35,7 @@ public class AuthService {
             return false;
         }
         if (BCrypt.checkpw(password, user.getPassword())) {
+            SessionManager.Login(user);
             System.out.println("User logged in successfully");
             return true;
         }
@@ -41,5 +43,13 @@ public class AuthService {
             System.out.println("Incorrect password");
             return false;
         }
+    }
+
+    public void logout() {
+        SessionManager.Logout();
+        System.out.println("User logged out");
+    }
+    public boolean isLoggedIn(){
+        return SessionManager.isLoggedIn();
     }
 }
