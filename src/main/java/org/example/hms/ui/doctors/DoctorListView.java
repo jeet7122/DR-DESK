@@ -80,7 +80,7 @@ public class DoctorListView {
     }
 
     // -------------------- PAGINATION --------------------
-    private HBox setupPagination() {
+    public HBox setupPagination() {
         Button prevButton = new Button("Previous");
         Button nextButton = new Button("Next");
 
@@ -105,7 +105,7 @@ public class DoctorListView {
     }
 
     // -------------------- SEARCH --------------------
-    private HBox setupSearch() {
+    public HBox setupSearch() {
         TextField searchField = new TextField();
         searchField.setPromptText("Search by first or last name...");
         Button searchButton = new Button("Search");

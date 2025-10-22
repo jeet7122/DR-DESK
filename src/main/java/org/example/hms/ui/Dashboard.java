@@ -9,6 +9,7 @@ import org.example.hms.ui.doctors.DeleteDoctorFormView;
 import org.example.hms.ui.doctors.DoctorFormView;
 import org.example.hms.ui.doctors.DoctorListView;
 import org.example.hms.ui.doctors.DoctorUpdateFormView;
+import org.example.hms.ui.patients.ListPatientsView;
 
 public class Dashboard {
     private final BorderPane root;
@@ -21,6 +22,12 @@ public class Dashboard {
         MenuItem deleteDoctor = new MenuItem("Delete Doctor");
         MenuItem updateDoctor = new MenuItem("Update Doctor");
 
+        //Menu Actions for Doctors
+        doctors.setOnAction(e -> root.setCenter(new DoctorListView().getView()));
+        addDoctor.setOnAction(e -> root.setCenter(new DoctorFormView().getView()));
+        updateDoctor.setOnAction(e -> root.setCenter(new DoctorUpdateFormView().getView()));
+        deleteDoctor.setOnAction(e -> {root.setCenter(new DeleteDoctorFormView().getView());});
+
         doctors.getItems().addAll(viewDoctors, addDoctor, deleteDoctor, updateDoctor);
 
         Menu Appointments = new Menu("Appointments");
@@ -30,6 +37,8 @@ public class Dashboard {
         MenuItem updateAppointment = new MenuItem("Update Appointment");
         Appointments.getItems().addAll(viewAllAppointments, addAppointment, deleteAppointment, updateAppointment);
 
+        //Menu actions of Appointments
+
 
         Menu Patients = new Menu("Patients");
         MenuItem viewPatients = new MenuItem("View Patients");
@@ -38,6 +47,8 @@ public class Dashboard {
         MenuItem updatePatient = new MenuItem("Update Patient");
         Patients.getItems().addAll(viewPatients, addPatient, deletePatient, updatePatient);
 
+        //----------------Menu actions of Patients-------------------------
+        viewPatients.setOnAction(e -> root.setCenter(new ListPatientsView().getView()));
 
         Menu Departments = new Menu("Departments");
         MenuItem viewDepartments = new MenuItem("View Departments");
@@ -59,10 +70,7 @@ public class Dashboard {
 
 
 
-        doctors.setOnAction(e -> root.setCenter(new DoctorListView().getView()));
-        addDoctor.setOnAction(e -> root.setCenter(new DoctorFormView().getView()));
-        updateDoctor.setOnAction(e -> root.setCenter(new DoctorUpdateFormView().getView()));
-        deleteDoctor.setOnAction(e -> {root.setCenter(new DeleteDoctorFormView().getView());});
+
         root.setCenter(new DoctorListView().getView());
     }
     public Parent getView(){

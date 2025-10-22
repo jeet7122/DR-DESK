@@ -1,12 +1,10 @@
 package org.example.hms.dao;
 
+import org.example.hms.models.Doctor;
 import org.example.hms.models.Patient;
 import org.example.hms.utils.DatabaseConnector;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,21 +74,7 @@ public class PatientDAO implements GenericDAO<Patient> {
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(sql)){
 
-            while(rs.next()){
-                Patient p = new Patient();
-                p.setId(rs.getInt("id"));
-                p.setFirstName(rs.getString("first_name"));
-                p.setLastName(rs.getString("last_name"));
-                p.setAge(rs.getInt("age"));
-                p.setGender(rs.getString("gender"));
-                p.setAddress(rs.getString("address"));
-                p.setBloodGroup(rs.getString("blood_group"));
-                p.setHasChronicDisease(rs.getBoolean("has_chronic_disease"));
-                p.setDateOfRegistration(rs.getObject("registration_date", LocalDateTime.class));
-                p.setEmail(rs.getString("email"));
-
-                patients.add(p);
-            }
+            mapFromDB(patients, rs);
         }
         catch (Exception e) {
             System.out.println("Error fetching patient from table: " + e.getMessage());
@@ -154,5 +138,77 @@ public class PatientDAO implements GenericDAO<Patient> {
             System.out.println("Error: " + e.getMessage());
         }
 
+    }
+
+    public List<Patient> getPatientsPaginated(String searchQuery, int rowsPerPage, int pageNumber) {
+        List<Patient> patients = new ArrayList<>();
+        int offset = (pageNumber - 1) * rowsPerPage;
+        String sql = """
+            SELECT * FROM patients
+            WHERE LOWER(first_name) LIKE ? OR LOWER(last_name) LIKE ?
+            ORDER BY id
+            LIMIT ? OFFSET ?
+        """;
+
+        try (Connection conn = DatabaseConnector.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            String query = "%" + searchQuery.toLowerCase() + "%";
+            stmt.setString(1, query);
+            stmt.setString(2, query);
+            stmt.setInt(3, rowsPerPage);
+            stmt.setInt(4, offset);
+
+            ResultSet rs = stmt.executeQuery();
+            mapFromDB(patients, rs);
+
+        }
+        catch (SQLException e) {
+            System.out.println("SQLException: " + e.getMessage());
+        }
+        catch (Exception e) {
+            System.out.println("Generic Exception: " + e.getMessage());
+        }
+
+        return patients;
+
+    }
+
+    private void mapFromDB(List<Patient> patients, ResultSet rs) throws SQLException {
+        while (rs.next()) {
+            Patient p = new Patient();
+            p.setId(rs.getInt("id"));
+            p.setFirstName(rs.getString("first_name"));
+            p.setLastName(rs.getString("last_name"));
+            p.setAge(rs.getInt("age"));
+            p.setGender(rs.getString("gender"));
+            p.setAddress(rs.getString("address"));
+            p.setBloodGroup(rs.getString("blood_group"));
+            p.setHasChronicDisease(rs.getBoolean("has_chronic_disease"));
+            p.setDateOfRegistration(rs.getObject("registration_date", LocalDateTime.class));
+            p.setEmail(rs.getString("email"));
+            patients.add(p);
+        }
+    }
+
+    public int getTotalCount(String searchQuery) {
+        String sql = "SELECT COUNT(*) FROM doctors WHERE LOWER(first_name) LIKE ? OR LOWER(last_name) LIKE ?";
+        try (Connection conn = DatabaseConnector.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            String query = "%" + searchQuery.toLowerCase() + "%";
+            stmt.setString(1, query);
+            stmt.setString(2, query);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("SQLException: " + e.getMessage());
+        }
+        catch (Exception e) {
+            System.out.println("Generic Exception: " + e.getMessage());
+        }
+        return 0;
     }
 }
