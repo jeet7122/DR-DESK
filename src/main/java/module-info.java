@@ -5,6 +5,7 @@ module org.example.hms {
     requires javafx.base;
     requires jbcrypt;
 
+
     exports org.example.hms;
     exports org.example.hms.dto;
 }

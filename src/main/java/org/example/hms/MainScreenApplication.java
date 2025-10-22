@@ -15,7 +15,7 @@ public class MainScreenApplication extends Application {
     public void start(Stage stage) throws IOException {
         SceneManager.init(stage);
         stage.setTitle("DR-DESK - Hospital Management System");
-        SceneManager.showDashboard();
+        SceneManager.showLogin();
         stage.show();
 
     }
