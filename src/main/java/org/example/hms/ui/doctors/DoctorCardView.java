@@ -1,4 +1,4 @@
-package org.example.hms.ui;
+package org.example.hms.ui.doctors;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import org.example.hms.models.Doctor;
+import org.example.hms.ui.SceneManager;
 
 
 public class DoctorCardView {

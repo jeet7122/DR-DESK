@@ -1,4 +1,4 @@
-package org.example.hms.ui;
+package org.example.hms.ui.doctors;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

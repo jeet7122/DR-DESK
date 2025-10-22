@@ -1,13 +1,14 @@
 package org.example.hms.ui;
 
-import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+import org.example.hms.ui.doctors.DeleteDoctorFormView;
+import org.example.hms.ui.doctors.DoctorFormView;
+import org.example.hms.ui.doctors.DoctorListView;
+import org.example.hms.ui.doctors.DoctorUpdateFormView;
 
 public class Dashboard {
     private final BorderPane root;
@@ -61,6 +62,7 @@ public class Dashboard {
         doctors.setOnAction(e -> root.setCenter(new DoctorListView().getView()));
         addDoctor.setOnAction(e -> root.setCenter(new DoctorFormView().getView()));
         updateDoctor.setOnAction(e -> root.setCenter(new DoctorUpdateFormView().getView()));
+        deleteDoctor.setOnAction(e -> {root.setCenter(new DeleteDoctorFormView().getView());});
         root.setCenter(new DoctorListView().getView());
     }
     public Parent getView(){
