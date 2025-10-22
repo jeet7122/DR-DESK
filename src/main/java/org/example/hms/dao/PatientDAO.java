@@ -1,6 +1,5 @@
 package org.example.hms.dao;
 
-import org.example.hms.models.Doctor;
 import org.example.hms.models.Patient;
 import org.example.hms.utils.DatabaseConnector;
 
