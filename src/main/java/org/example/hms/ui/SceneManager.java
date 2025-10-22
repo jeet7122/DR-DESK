@@ -6,6 +6,7 @@ import javafx.stage.Stage;
 import org.example.hms.models.UserRoles;
 import org.example.hms.ui.auth.LoginView;
 import org.example.hms.ui.auth.RegisterUserView;
+import org.example.hms.ui.auth.UpdateUsersView;
 import org.example.hms.utils.SessionManager;
 
 public class SceneManager {
@@ -41,7 +42,7 @@ public class SceneManager {
         primaryStage.setScene(scene);
     }
 
-    public static void showRegistration() {
+    public static void showRegistration() throws NullPointerException {
         RegisterUserView view = new RegisterUserView();
         Scene scene = new Scene((Parent) view.getView(), 500, 600);
         scene.getStylesheets().add(SceneManager.class.getResource("/css/card.css").toExternalForm());
@@ -51,6 +52,12 @@ public class SceneManager {
     public static void showLogin() {
         SessionManager.Logout();
         LoginView view = new LoginView();
+        Scene scene = new Scene(view.getView(), 500, 600);
+        primaryStage.setScene(scene);
+    }
+
+    public static void ResetUser() {
+        UpdateUsersView view =  new UpdateUsersView();
         Scene scene = new Scene(view.getView(), 500, 600);
         primaryStage.setScene(scene);
     }

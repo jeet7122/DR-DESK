@@ -169,4 +169,36 @@ public class UsersDAO implements GenericDAO<User>{
         }
         return null;
     }
+
+    public void updateUser(String email, String password, String role, int id) {
+        String sql = """
+                UPDATE users
+                SET email = ?, password = ?, roles = ?
+                WHERE user_id = ?
+                """;
+        try(
+                Connection conn = DatabaseConnector.getConnection();
+                PreparedStatement statement = conn.prepareStatement(sql)
+        )
+        {
+            statement.setString(1, email);
+            statement.setString(2, password);
+            statement.setString(3, role);
+            statement.setInt(4, id);
+            int rows =  statement.executeUpdate();
+            if (rows > 0) {
+                System.out.println("Successfully Updated");
+            }
+            else {
+                System.out.println("Failed Updated");
+            }
+        }
+        catch (SQLException e){
+            System.out.println("SQLException: " + e.getMessage());
+        }
+        catch (Exception e){
+            System.out.println("Exception: " + e.getMessage());
+        }
+    }
+
 }

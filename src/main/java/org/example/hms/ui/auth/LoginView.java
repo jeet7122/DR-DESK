@@ -11,7 +11,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.example.hms.dao.UsersDAO;
 import org.example.hms.models.User;
-import org.example.hms.models.UserRoles;
 import org.example.hms.services.AuthService;
 import org.example.hms.ui.SceneManager;
 
@@ -39,6 +38,9 @@ public class LoginView {
 
         Label info = new Label("Register a new account?");
         Label register = new Label("Register");
+        Label forgotPassword = new Label("Forgot Password");
+
+        forgotPassword.setOnMouseClicked(event -> SceneManager.ResetUser());
         register.setOnMouseClicked(event -> {
             SceneManager.showRegistration();
         });
@@ -46,7 +48,7 @@ public class LoginView {
         box.getChildren().addAll(info, register);
 
         Button loginBTN = new Button("Login");
-        root.getChildren().addAll(title, gridPane, loginBTN,  box);
+        root.getChildren().addAll(title, gridPane, loginBTN,  box, forgotPassword);
 
         loginBTN.setOnAction(e -> {
             try {
