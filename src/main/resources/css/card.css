@@ -1,0 +1,218 @@
+/* ====================================================================
+   GLOBAL & BASE STYLES
+   Focus: Readability, reduced eye strain, modern typography
+   ==================================================================== */
+.root {
+    /* Soft Off-White Background for the whole app canvas (F4F7F8) */
+    -fx-background-color: #F4F7F8;
+}
+
+/* Set a consistent, clear font for all elements */
+* {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 13px;
+    /* Primary Text Color: Dark Gray for high contrast */
+    -fx-text-fill: #212121;
+}
+
+/* --- Primary Action Buttons (Search, Next, Previous) --- */
+.button {
+    -fx-background-color: #007ACC; /* Primary Accent Blue */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 6 15 6 15;
+    -fx-background-radius: 4px;
+}
+
+.button:hover {
+    -fx-background-color: #005A99; /* Slightly darker blue on hover for feedback */
+    -fx-cursor: hand;
+}
+
+/* --- Search Input Field --- */
+.text-field {
+    -fx-background-color: white;
+    -fx-border-color: #E0E0E0; /* Subtle border */
+    -fx-border-radius: 4px;
+    -fx-padding: 5;
+}
+
+
+/* ====================================================================
+   NAVIGATION MENU BAR STYLING
+   Focus: Professional structure and clear active state
+   ==================================================================== */
+
+/* Background for the entire bar - Deep Navy Blue for authority */
+.menu-bar {
+    -fx-background-color: #1D3D72;
+    -fx-padding: 0;
+}
+
+/* Base style for all Menu headers (e.g., "Doctors", "Patients") */
+.menu {
+    -fx-padding: 10 15 10 15;
+    -fx-background-color: transparent;
+}
+
+/* Set inactive menu text to light gray to contrast with the navy bar */
+.menu .label {
+    -fx-text-fill: #E0E0E0;
+    -fx-font-weight: bold;
+}
+
+/* Menu State: Hover or Showing the dropdown */
+.menu:hover, .menu:showing {
+    -fx-background-color: #007ACC; /* Primary Accent Blue */
+}
+
+/* Ensure text on active/hovered menu is pure white */
+.menu:hover .label, .menu:showing .label {
+    -fx-text-fill: white;
+}
+
+
+/* ====================================================================
+   MENU ITEM DROPDOWN STYLING
+   Focus: High-contrast readability on the action list and correct layering
+   ==================================================================== */
+
+/* The dropdown container (Context Menu) - Pure white surface, subtle shadow for depth */
+.context-menu {
+    -fx-background-color: #38f;
+    -fx-border-color: #CCCCCC;
+    -fx-border-width: 1px;
+    -fx-background-radius: 4px;
+    /* Add subtle shadow for better visual separation from content below */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0.5, 0, 2);
+}
+
+/* Individual items within the dropdown */
+.menu-item {
+    -fx-padding: 5 15 5 15;
+    -fx-background-color: transparent;
+}
+
+/* FIX: Explicitly ensure the menu item text is dark against the white dropdown background. */
+.menu-item .label {
+    -fx-text-fill: #212121; /* Dark text fill */
+    -fx-font-weight: normal;
+}
+
+/* Highlighted menu item on focus/hover */
+.menu-item:focused {
+    -fx-background-color: #C0E6FF; /* Light blue selection highlight */
+}
+
+/* Ensure text remains dark on the light blue selection */
+.menu-item:focused .label {
+    -fx-text-fill: #212121;
+}
+
+
+/* ====================================================================
+   DATA TABLE (TableView) STYLING
+   Focus: Clarity and high data legibility
+   ==================================================================== */
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 1;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #E0E0E0; /* Light Gray Header Background */
+}
+
+.table-view .column-header-background .label {
+    -fx-text-fill: #1D3D72; /* Deep Navy Blue Text */
+    -fx-font-weight: bold;
+}
+
+/* Stripe effect for easy reading */
+.table-row-cell:odd {
+    -fx-background-color: #FBFBFB; /* Very subtle light gray */
+}
+.table-row-cell:even {
+    -fx-background-color: white;
+}
+
+/* Selected Row Color */
+.table-row-cell:selected {
+    -fx-background-color: #C0E6FF; /* Light blue highlight */
+}
+
+/* Ensure selected row text is visible */
+.table-row-cell:selected .text {
+    -fx-fill: #212121;
+}
+/* --- 1. CARD CONTAINER (GridPane) --- */
+.card {
+    /* Pure White background for separation from the F4F7F8 app background */
+    -fx-background-color: #FFFFFF;
+    /* Subtle border for definition */
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 1px;
+    /* Rounded corners for a modern, softer look */
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    /* Internal padding for content spacing */
+    -fx-padding: 20px;
+    /* Optional: Subtle shadow to lift the card off the background */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.5, 0, 0);
+    /* Spacing between columns/rows within the grid */
+    -fx-hgap: 20px;
+    -fx-vgap: 12px;
+    -fx-start-margin: 20px;
+}
+.labels{
+    -fx-font-weight: 700;
+}
+
+/* ====================================================================
+   FORM VIEW STYLING (For DoctorFormView)
+   ==================================================================== */
+
+/* --- 1. FORM VBOX CONTAINER --- */
+.vbox {
+    -fx-background-color: #F4F7F8;
+}
+
+/* --- 2. FORM TITLE --- */
+/* Add this class to your "Add Doctor" label in Java */
+.form-title {
+    -fx-font-size: 1.4em;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1D3D72;
+    -fx-padding: 0 0 10px 0;
+}
+
+/* --- 3. FORM GRID LAYOUT --- */
+/* Add this class to your form GridPane in Java */
+.gp {
+    -fx-padding: 20px;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+    -fx-background-color: #FBFBFB; /* Very light gray for the inner form area */
+}
+
+/* --- 4. DATE PICKER AND CHECKBOX STYLING --- */
+.date-picker {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #CCCCCC;
+    -fx-border-radius: 4px;
+    -fx-padding: 8px 10px;
+    -fx-max-width: 300px;
+}
+.date-picker:focused {
+    -fx-border-color: #007ACC;
+    -fx-border-width: 1.5px;
+}
+.check-box {
+    -fx-text-fill: #212121;
+}
+.check-box:selected .box {
+    -fx-background-color: #007ACC;
+    -fx-border-color: #007ACC;
+}

@@ -3,6 +3,7 @@ package org.example.hms.ui;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -64,6 +65,18 @@ public class DoctorListView {
         table.getColumns().addAll(idCol, firstNameCol, lastNameCol, emailCol, specCol, contactCol, joinDateCol);
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         table.setPlaceholder(new Label("No doctors found"));
+        table.setRowFactory(tv -> {
+            TableRow<Doctor> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2) {
+                    Doctor doctor = row.getItem();
+                    Node view = new DoctorCardView(doctor).getView();
+                    root.setCenter(view);
+                    root.setTop(null);
+                }
+            });
+            return row;
+        });
     }
 
     // -------------------- PAGINATION --------------------

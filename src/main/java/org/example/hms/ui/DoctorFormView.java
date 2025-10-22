@@ -95,6 +95,9 @@ public class DoctorFormView {
             }
         });
 
+        title.getStyleClass().add("form-title");
+        form.getStyleClass().add("gp");
+
         root.getChildren().addAll(title, form, saveBtn);
     }
 

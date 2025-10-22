@@ -87,6 +87,8 @@ public class DoctorUpdateFormView {
                 System.out.println("Parsing Exception" + ex.getMessage());
             }
         });
+        title.getStyleClass().add("form-title");
+        form.getStyleClass().add("gp");
         root.getChildren().addAll(title, form, update);
 
 

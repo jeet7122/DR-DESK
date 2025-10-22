@@ -11,6 +11,7 @@ public class SceneManager {
     public static void showDashboard(){
         Dashboard view = new Dashboard();
         Scene scene = new Scene(view.getView(), 1200, 800);
+        scene.getStylesheets().add(SceneManager.class.getResource("/css/card.css").toExternalForm());
         primaryStage.setScene(scene);
     }
 }
