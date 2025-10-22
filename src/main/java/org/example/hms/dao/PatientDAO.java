@@ -35,7 +35,7 @@ public class PatientDAO implements GenericDAO<Patient> {
     public void update(Patient obj, int id) {
         String sql = """
                 UPDATE patients
-                SET first_name = ?, last_name = ?, age = ? , gender = ?, blood_group = ?, has_chronic_disease = ?
+                SET first_name = ?, last_name = ?, age = ? , gender = ?, blood_group = ?, has_chronic_disease = ?, email = ?
                 WHERE id = ?
                 """;
 

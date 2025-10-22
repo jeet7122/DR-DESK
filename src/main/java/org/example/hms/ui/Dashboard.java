@@ -9,7 +9,9 @@ import org.example.hms.ui.doctors.DeleteDoctorFormView;
 import org.example.hms.ui.doctors.DoctorFormView;
 import org.example.hms.ui.doctors.DoctorListView;
 import org.example.hms.ui.doctors.DoctorUpdateFormView;
+import org.example.hms.ui.patients.AddPatientView;
 import org.example.hms.ui.patients.ListPatientsView;
+import org.example.hms.ui.patients.UpdatePatientView;
 
 public class Dashboard {
     private final BorderPane root;
@@ -49,6 +51,8 @@ public class Dashboard {
 
         //----------------Menu actions of Patients-------------------------
         viewPatients.setOnAction(e -> root.setCenter(new ListPatientsView().getView()));
+        addPatient.setOnAction(e -> root.setCenter(new AddPatientView().getView()));
+        updatePatient.setOnAction(e -> root.setCenter(new UpdatePatientView().getView()));
 
         Menu Departments = new Menu("Departments");
         MenuItem viewDepartments = new MenuItem("View Departments");
