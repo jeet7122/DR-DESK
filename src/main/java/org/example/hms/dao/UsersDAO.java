@@ -3,14 +3,10 @@ package org.example.hms.dao;
 import org.example.hms.models.User;
 import org.example.hms.models.UserRoles;
 import org.example.hms.utils.DatabaseConnector;
-
 import java.sql.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class UsersDAO implements GenericDAO<User>{
     @Override
@@ -44,12 +40,63 @@ public class UsersDAO implements GenericDAO<User>{
 
     @Override
     public void update(User obj, int id) {
-
+        String sql = """
+                UPDATE users
+                SET email = ?, password = ?, roles = ?
+                WHERE user_id = ?
+                """;
+        try(
+                Connection conn = DatabaseConnector.getConnection();
+                PreparedStatement statement = conn.prepareStatement(sql)
+                )
+        {
+            statement.setString(1, obj.getEmail());
+            statement.setString(2, obj.getPassword());
+            statement.setString(3, String.valueOf(obj.getRole()));
+            statement.setInt(4, id);
+            int rows =  statement.executeUpdate();
+            if (rows > 0) {
+                System.out.println("Successfully Updated");
+            }
+            else {
+                System.out.println("Failed Updated");
+            }
+        }
+        catch (SQLException e){
+            System.out.println("SQLException: " + e.getMessage());
+        }
+        catch (Exception e){
+            System.out.println("Exception: " + e.getMessage());
+        }
     }
 
     @Override
     public void delete(int id) {
+        String sql = """
+                DELETE FROM users
+                WHERE user_id = ?
+        """;
+        try(
+                Connection connection = DatabaseConnector.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)
+                )
+        {
 
+            statement.setInt(1, id);
+            int rows =  statement.executeUpdate();
+            if (rows > 0) {
+                System.out.println("Successfully Deleted");
+            }
+            else {
+                System.out.println("Failed Deleted");
+            }
+        }
+        catch (SQLException e){
+            System.out.println("SQLException: " + e.getMessage());
+        }
+        catch (Exception e){
+            System.out.println("Exception: " + e.getMessage());
+        }
     }
 
     @Override
@@ -98,9 +145,6 @@ public class UsersDAO implements GenericDAO<User>{
 
     }
 
-    public void login(String email, String password) {
-
-    }
     public User findByEmail(String email) {
         String sql = "SELECT * FROM users WHERE email = ?";
         try
