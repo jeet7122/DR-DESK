@@ -9,8 +9,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import org.example.hms.dao.UsersDAO;
-import org.example.hms.models.User;
-import org.example.hms.models.UserRoles;
 import org.example.hms.ui.SceneManager;
 
 
