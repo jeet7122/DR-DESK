@@ -33,7 +33,11 @@ public abstract class AbstractListView<T, D extends GenericDAO<T>>{
         this.dao = createDAO();
         this.table = new TableView<>();
         this.root = new BorderPane();
+
+        //Implement this method in sub-class according to your need
         setupColumns();
+
+        //Common UI features
         HBox searchBox = setupSearch();
         HBox pagination = setupPagination();
 
@@ -44,6 +48,7 @@ public abstract class AbstractListView<T, D extends GenericDAO<T>>{
         loadPage(currentPage, currentSearchQuery);
     }
 
+    //Common Search Box for all pages, can be over-ridden by child classes
     private HBox setupSearch() {
         TextField searchField = new TextField();
         searchField.setPromptText(getSearchPrompt());
@@ -64,6 +69,7 @@ public abstract class AbstractListView<T, D extends GenericDAO<T>>{
         return searchBox;
     }
 
+    //Common Pagination setup
     private HBox setupPagination() {
         Button prevButton = new Button("Previous");
         Button nexButton = new Button("Next");
@@ -89,6 +95,8 @@ public abstract class AbstractListView<T, D extends GenericDAO<T>>{
         return pagination;
 
     }
+
+    //Common page loading setup
     protected  void loadPage(int pageNumber, String currentSearchQuery){
 
         List<T> pageData = getPaginatedData(currentSearchQuery, rowsPerPage, pageNumber);
