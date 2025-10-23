@@ -9,11 +9,12 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import org.example.hms.dao.DoctorDAO;
 import org.example.hms.models.Doctor;
+import org.example.hms.ui.utils.CommonUI;
 
 import java.time.LocalDate;
 import java.util.List;
 
-public class DoctorListView {
+public class DoctorListView implements CommonUI {
     private final BorderPane root;
     private final TableView<Doctor> table;
     private final DoctorDAO doctorDAO;
@@ -79,7 +80,9 @@ public class DoctorListView {
         });
     }
 
-    // -------------------- PAGINATION --------------------
+
+    // ------------------- PAGINATION --------------------
+    @Override
     public HBox setupPagination() {
         Button prevButton = new Button("Previous");
         Button nextButton = new Button("Next");
@@ -105,6 +108,7 @@ public class DoctorListView {
     }
 
     // -------------------- SEARCH --------------------
+    @Override
     public HBox setupSearch() {
         TextField searchField = new TextField();
         searchField.setPromptText("Search by first or last name...");
