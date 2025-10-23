@@ -133,6 +133,7 @@ public class DoctorListView {
     private void loadPage(int pageNumber, String searchQuery) {
         List<Doctor> pageData = doctorDAO.getDoctorsPaginated(searchQuery, rowsPerPage, pageNumber);
         int totalRecords = doctorDAO.getTotalCount(searchQuery);
+        System.out.println("Total Records " + totalRecords);
         totalPages = (int) Math.ceil((double) totalRecords / rowsPerPage);
 
         table.setItems(FXCollections.observableArrayList(pageData));

@@ -6,6 +6,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import org.example.hms.ui.department.AddDepartmentForm;
+import org.example.hms.ui.department.DepartmentListView;
 import org.example.hms.ui.department.UpdateDepartmentForm;
 import org.example.hms.ui.doctors.DeleteDoctorFormView;
 import org.example.hms.ui.doctors.DoctorFormView;
@@ -65,6 +66,8 @@ public class Dashboard {
 
         addDepartment.setOnAction(e -> root.setCenter(new AddDepartmentForm().getView()));
         updateDepartment.setOnAction(e -> root.setCenter(new UpdateDepartmentForm().getView()));
+        viewDepartments.setOnAction(e -> root.setCenter(new DepartmentListView().getView()));
+
         Menu Bills = new Menu("Bills");
         MenuItem viewBills = new MenuItem("View Bills");
         MenuItem addBill = new MenuItem("Add Bill");
