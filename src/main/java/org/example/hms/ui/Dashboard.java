@@ -7,6 +7,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import org.example.hms.ui.appointment.AddAppointmentView;
 import org.example.hms.ui.appointment.AppointmentListView;
+import org.example.hms.ui.appointment.UpdateAppointmentView;
 import org.example.hms.ui.department.AddDepartmentForm;
 import org.example.hms.ui.department.DepartmentListView;
 import org.example.hms.ui.department.UpdateDepartmentForm;
@@ -47,6 +48,7 @@ public class Dashboard {
         //Menu actions of Appointments
         viewAllAppointments.setOnAction(e -> root.setCenter(new AppointmentListView().getView()));
         addAppointment.setOnAction(e -> root.setCenter(new AddAppointmentView().getView()));
+        updateAppointment.setOnAction(e -> root.setCenter(new UpdateAppointmentView().getView()));
 
         Menu Patients = new Menu("Patients");
         MenuItem viewPatients = new MenuItem("View Patients");
