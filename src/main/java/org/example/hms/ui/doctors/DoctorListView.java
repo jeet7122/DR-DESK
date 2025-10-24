@@ -1,47 +1,30 @@
 package org.example.hms.ui.doctors;
 
 import javafx.beans.property.*;
-import javafx.collections.FXCollections;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import org.example.hms.dao.DoctorDAO;
 import org.example.hms.models.Doctor;
-import org.example.hms.ui.utils.CommonUI;
+import org.example.hms.ui.utils.AbstractListView;
 
 import java.time.LocalDate;
 import java.util.List;
 
-public class DoctorListView implements CommonUI {
-    private final BorderPane root;
-    private final TableView<Doctor> table;
-    private final DoctorDAO doctorDAO;
-    private final int rowsPerPage = 10; // Records per page
-    private int currentPage = 1;
-    private int totalPages = 1;
-    private String currentSearchQuery = "";
-    private final Label pageInfoLabel = new Label();
+public class DoctorListView extends AbstractListView<Doctor, DoctorDAO> {
 
     public DoctorListView() {
-        root = new BorderPane();
-        table = new TableView<>();
-        doctorDAO = new DoctorDAO();
+        super();
+     }
 
-        setupColumns();
-        HBox searchBox = setupSearch();
-        HBox paginationBox = setupPagination();
-
-        root.setTop(searchBox);
-        root.setCenter(table);
-        root.setBottom(paginationBox);
-
-        loadPage(currentPage, currentSearchQuery);
+    @Override
+    protected DoctorDAO createDAO() {
+        return new DoctorDAO();
     }
 
     // -------------------- TABLE SETUP --------------------
-    private void setupColumns() {
+    @Override
+    protected void setupColumns() {
         TableColumn<Doctor, Integer> idCol = new TableColumn<>("ID");
         idCol.setCellValueFactory(d -> new SimpleIntegerProperty(d.getValue().getId()).asObject());
 
@@ -80,73 +63,18 @@ public class DoctorListView implements CommonUI {
         });
     }
 
-
-    // ------------------- PAGINATION --------------------
     @Override
-    public HBox setupPagination() {
-        Button prevButton = new Button("Previous");
-        Button nextButton = new Button("Next");
-
-        prevButton.setOnAction(e -> {
-            if (currentPage > 1) {
-                currentPage--;
-                loadPage(currentPage, currentSearchQuery);
-            }
-        });
-
-        nextButton.setOnAction(e -> {
-            if (currentPage < totalPages) {
-                currentPage++;
-                loadPage(currentPage, currentSearchQuery);
-            }
-        });
-
-        HBox paginationBox = new HBox(10, prevButton, pageInfoLabel, nextButton);
-        paginationBox.setPadding(new Insets(10));
-        paginationBox.setStyle("-fx-alignment: center;");
-        return paginationBox;
+    protected String getSearchPrompt() {
+        return "Search for doctors";
     }
 
-    // -------------------- SEARCH --------------------
     @Override
-    public HBox setupSearch() {
-        TextField searchField = new TextField();
-        searchField.setPromptText("Search by first or last name...");
-        Button searchButton = new Button("Search");
-
-        // --- Dynamic live search ---
-        searchField.textProperty().addListener((obs, oldText, newText) -> {
-            currentSearchQuery = newText.trim();
-            currentPage = 1; // Reset page when new search
-            loadPage(currentPage, currentSearchQuery);
-        });
-
-        // --- Optional button (for explicit search) ---
-        searchButton.setOnAction(e -> {
-            currentSearchQuery = searchField.getText().trim();
-            currentPage = 1;
-            loadPage(currentPage, currentSearchQuery);
-        });
-
-        HBox searchBox = new HBox(10, searchField, searchButton);
-        searchBox.setPadding(new Insets(10));
-        return searchBox;
+    protected List<Doctor> getPaginatedData(String query, int limit, int offset) {
+        return dao.getDoctorsPaginated(query, limit, offset);
     }
 
-    // -------------------- DATA LOADING --------------------
-    private void loadPage(int pageNumber, String searchQuery) {
-        List<Doctor> pageData = doctorDAO.getDoctorsPaginated(searchQuery, rowsPerPage, pageNumber);
-        int totalRecords = doctorDAO.getTotalCount(searchQuery);
-        System.out.println("Total Records " + totalRecords);
-        totalPages = (int) Math.ceil((double) totalRecords / rowsPerPage);
-
-        table.setItems(FXCollections.observableArrayList(pageData));
-
-        if (totalPages == 0) totalPages = 1; // Avoid divide-by-zero
-        pageInfoLabel.setText("Page " + currentPage + " of " + totalPages);
-    }
-
-    public Parent getView() {
-        return root;
+    @Override
+    protected int getTotalDataCount(String query) {
+        return dao.getTotalCount(query);
     }
 }

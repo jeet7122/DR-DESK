@@ -13,6 +13,7 @@ public class Mappers {
         appointment.setDoctorId(obj.getDoctorId());
         appointment.setNotes(obj.getNotes());
         appointment.setStatus(Status.valueOf(obj.getStatus()));
+        appointment.setAppointmentDate(obj.getAppointmentDate());
         return appointment;
     }
 }

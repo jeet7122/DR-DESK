@@ -5,6 +5,8 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
+import org.example.hms.ui.appointment.AddAppointmentView;
+import org.example.hms.ui.appointment.AppointmentListView;
 import org.example.hms.ui.department.AddDepartmentForm;
 import org.example.hms.ui.department.DepartmentListView;
 import org.example.hms.ui.department.UpdateDepartmentForm;
@@ -31,7 +33,7 @@ public class Dashboard {
         doctors.setOnAction(e -> root.setCenter(new DoctorListView().getView()));
         addDoctor.setOnAction(e -> root.setCenter(new DoctorFormView().getView()));
         updateDoctor.setOnAction(e -> root.setCenter(new DoctorUpdateFormView().getView()));
-        deleteDoctor.setOnAction(e -> {root.setCenter(new DeleteDoctorFormView().getView());});
+        deleteDoctor.setOnAction(e -> root.setCenter(new DeleteDoctorFormView().getView()));
 
         doctors.getItems().addAll(viewDoctors, addDoctor, deleteDoctor, updateDoctor);
 
@@ -43,7 +45,8 @@ public class Dashboard {
         Appointments.getItems().addAll(viewAllAppointments, addAppointment, deleteAppointment, updateAppointment);
 
         //Menu actions of Appointments
-
+        viewAllAppointments.setOnAction(e -> root.setCenter(new AppointmentListView().getView()));
+        addAppointment.setOnAction(e -> root.setCenter(new AddAppointmentView().getView()));
 
         Menu Patients = new Menu("Patients");
         MenuItem viewPatients = new MenuItem("View Patients");

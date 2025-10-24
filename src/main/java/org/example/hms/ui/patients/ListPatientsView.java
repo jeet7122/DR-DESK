@@ -16,40 +16,24 @@ import org.example.hms.dao.PatientDAO;
 import org.example.hms.models.Patient;
 
 import org.example.hms.ui.doctors.DoctorListView;
+import org.example.hms.ui.utils.AbstractListView;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class ListPatientsView {
-    private final BorderPane root;
-    private final TableView<Patient> table;
-    private final PatientDAO patientDAO;
-    private final int rowsPerPage = 10; // Records per page
-    private int currentPage = 1;
-    private int totalPages = 1;
-    private String currentSearchQuery = "";
-    private final Label pageInfoLabel = new Label();
-    private final DoctorListView  doctorListView;
-
+public class ListPatientsView extends AbstractListView<Patient, PatientDAO> {
     public ListPatientsView() {
-        root = new BorderPane();
-        table = new TableView<>();
-        patientDAO = new PatientDAO();
-        doctorListView = new DoctorListView();
+        super();
+    }
 
-        setupColumns();
-        HBox searchBox = doctorListView.setupSearch();
-        HBox paginationBox = doctorListView.setupPagination();
-
-        root.setTop(searchBox);
-        root.setCenter(table);
-        root.setBottom(paginationBox);
-
-        loadPage(currentPage, currentSearchQuery);
+    @Override
+    protected PatientDAO createDAO() {
+        return new PatientDAO();
     }
 
     // -------------------- TABLE SETUP --------------------
-    private void setupColumns() {
+    @Override
+    protected void setupColumns() {
         TableColumn<Patient, Integer> idCol = new TableColumn<>("ID");
         idCol.setCellValueFactory(d -> new SimpleIntegerProperty(d.getValue().getId()).asObject());
 
@@ -94,22 +78,19 @@ public class ListPatientsView {
         });
     }
 
-
-    // -------------------- SEARCH --------------------
-
-    // -------------------- DATA LOADING --------------------
-    private void loadPage(int pageNumber, String searchQuery) {
-        List<Patient> pageData = patientDAO.getPatientsPaginated(searchQuery, rowsPerPage, pageNumber);
-        int totalRecords = patientDAO.getTotalCount(searchQuery);
-        totalPages = (int) Math.ceil((double) totalRecords / rowsPerPage);
-
-        table.setItems(FXCollections.observableArrayList(pageData));
-
-        if (totalPages == 0) totalPages = 1; // Avoid divide-by-zero
-        pageInfoLabel.setText("Page " + currentPage + " of " + totalPages);
+    @Override
+    protected String getSearchPrompt() {
+        return "Search for Patients";
     }
 
-    public Parent getView() {
-        return root;
+    @Override
+    protected List<Patient> getPaginatedData(String query, int limit, int offset) {
+        return dao.getPatientsPaginated(query, limit, offset);
     }
+
+    @Override
+    protected int getTotalDataCount(String query) {
+        return dao.getTotalCount(query);
+    }
+
 }
